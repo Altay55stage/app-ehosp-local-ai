@@ -70,29 +70,7 @@ export default function HomeScreen({ navigation }: any) {
           </TouchableOpacity>
         </View>
         
-        {/* Premium Banner */}
-        {process.env.EXPO_PUBLIC_ALL_FREE !== 'true' && subscriptionStatus === 'free' && (
-          <TouchableOpacity 
-            onPress={() => navigation.navigate('Subscription')}
-            className="rounded-3xl p-5 mt-8 flex-row items-center"
-            style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.lg }}
-            accessibilityRole="button"
-            accessibilityLabel="Passer au premium"
-          >
-            <View className="w-12 h-12 rounded-full items-center justify-center mr-4" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
-              <Ionicons name="star" size={24} color="#38BDF8" />
-            </View>
-            <View className="flex-1">
-              <Text style={[Typography.button, { color: Colors.textInverse, fontSize: 14 }]}>
-                PASSEZ AU PREMIUM
-              </Text>
-              <Text style={[Typography.caption, { color: '#94A3B8', marginTop: 4 }]}>
-                Débloquez toutes les fonctions IA en illimité.
-              </Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color="#38BDF8" />
-          </TouchableOpacity>
-        )}
+
 
         {/* Quick Stats */}
         <View className="flex-row justify-between mt-8">

@@ -33,38 +33,38 @@ export default function AdminDashboardScreen() {
   };
 
   if (loading) return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.dark }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background }}>
       <ActivityIndicator size="large" color={Colors.warning} />
     </View>
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <ScrollView style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 24 }}>
         <View style={{ marginBottom: 32 }}>
-          <Text style={[Typography.h1, { color: '#FFFFFF' }]}>Console Admin</Text>
+          <Text style={[Typography.h1, { color: Colors.textPrimary }]}>Console Admin</Text>
           <Text style={[Typography.caption, { color: Colors.warning, textTransform: 'uppercase', letterSpacing: 2, marginTop: 4 }]}>Modération des Médecins</Text>
         </View>
 
-        <Text style={[Typography.bodyMedium, { color: '#FFFFFF', marginBottom: 16 }]}>Candidatures en attente ({candidacies.length})</Text>
+        <Text style={[Typography.bodyMedium, { color: Colors.textPrimary, marginBottom: 16 }]}>Candidatures en attente ({candidacies.length})</Text>
 
         {candidacies.length === 0 ? (
-          <View style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderStyle: 'dashed', borderColor: 'rgba(255,255,255,0.1)', borderRadius: 24, padding: 40, alignItems: 'center' }}>
+          <View style={{ backgroundColor: Colors.surface, borderWidth: 1, borderStyle: 'dashed', borderColor: Colors.border, borderRadius: 24, padding: 40, alignItems: 'center', ...Shadows.sm }}>
             <Ionicons name="checkmark-circle-outline" size={48} color={Colors.primary} />
-            <Text style={[Typography.body, { color: '#94A3B8', marginTop: 16, textAlign: 'center' }]}>Aucune candidature à traiter.</Text>
+            <Text style={[Typography.body, { color: Colors.textSecondary, marginTop: 16, textAlign: 'center' }]}>Aucune candidature à traiter.</Text>
           </View>
         ) : candidacies.map((c) => (
-          <View key={c.uid} style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', borderRadius: 24, padding: 20, marginBottom: 16 }}>
+          <View key={c.uid} style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: 24, padding: 20, marginBottom: 16, ...Shadows.sm }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
               <View style={{ flex: 1 }}>
-                <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>{c.email}</Text>
+                <Text style={[Typography.bodyMedium, { color: Colors.textPrimary }]}>{c.email}</Text>
                 <Text style={[Typography.caption, { color: Colors.primary, textTransform: 'uppercase', marginTop: 4 }]}>{c.specialization || 'Spécialité non précisée'}</Text>
-                <Text style={[Typography.caption, { color: '#94A3B8', marginTop: 4 }]}>Expérience : {c.experience || '0'} ans</Text>
-                {c.bio && <Text style={[Typography.caption, { color: '#64748B', marginTop: 8, fontStyle: 'italic' }]} numberOfLines={2}>"{c.bio}"</Text>}
-                <Text style={[Typography.caption, { color: '#475569', marginTop: 8 }]}>Soumis le : {new Date(c.submittedAt).toLocaleDateString()}</Text>
+                <Text style={[Typography.caption, { color: Colors.textSecondary, marginTop: 4 }]}>Expérience : {c.experience || '0'} ans</Text>
+                {c.bio && <Text style={[Typography.caption, { color: Colors.textSecondary, marginTop: 8, fontStyle: 'italic' }]} numberOfLines={2}>"{c.bio}"</Text>}
+                <Text style={[Typography.caption, { color: Colors.textMuted, marginTop: 8 }]}>Soumis le : {new Date(c.submittedAt).toLocaleDateString()}</Text>
               </View>
               <TouchableOpacity onPress={() => Linking.openURL(c.licenseUrl)}
-                style={{ backgroundColor: Colors.primary + '30', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: Colors.primary + '50' }}
+                style={{ backgroundColor: Colors.primaryLight, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: Colors.primary + '30' }}
                 accessibilityRole="button" accessibilityLabel="Voir le PDF">
                 <Ionicons name="eye-outline" size={16} color={Colors.primary} />
                 <Text style={[Typography.caption, { color: Colors.primary, marginLeft: 4 }]}>Voir PDF</Text>

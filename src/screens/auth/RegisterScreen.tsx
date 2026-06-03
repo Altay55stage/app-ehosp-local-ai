@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
-import { auth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from '../../services/FirebaseService';
-import { setUser } from '../../store/slices/authSlice';
+import { auth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithCredential, db, ref, set } from '../../services/FirebaseService';
+import { setUser, setHasAcceptedConsent } from '../../store/slices/authSlice';
 import GradientButton from '../../components/ui/GradientButton';
 import Input from '../../components/ui/Input';
 import Toast, { useToast } from '../../components/ui/Toast';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Colors, Typography } from '../../theme';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -45,6 +46,7 @@ export default function RegisterScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [acceptedCGU, setAcceptedCGU] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { toast, show: showToast, hide: hideToast } = useToast();
@@ -66,12 +68,17 @@ export default function RegisterScreen({ navigation }: any) {
       const credential = GoogleAuthProvider.credential(id_token);
       setLoading(true);
       signInWithCredential(auth, credential)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
+          const uid = userCredential.user.uid;
+          try {
+            await set(ref(db, `users/${uid}/onboarding/consent`), { accepted: true, acceptedAt: Date.now(), version: 'v2_blockchain' });
+            await AsyncStorage.setItem(`@consent_${uid}`, 'true');
+          } catch {}
+          dispatch(setHasAcceptedConsent(true));
           dispatch(setUser({
-            uid: userCredential.user.uid,
+            uid,
             email: userCredential.user.email,
           }));
-          navigation.getParent()?.navigate('Consent');
         })
         .catch(() => {
           showToast('Erreur de connexion Google. Réessayez.', 'error');
@@ -107,15 +114,24 @@ export default function RegisterScreen({ navigation }: any) {
       showToast('Votre mot de passe doit respecter toutes les règles de sécurité.', 'warning');
       return;
     }
+    if (!acceptedCGU) {
+      showToast('Veuillez accepter les CGU et la politique de confidentialité.', 'warning');
+      return;
+    }
 
     setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
+      try {
+        await set(ref(db, `users/${uid}/onboarding/consent`), { accepted: true, acceptedAt: Date.now(), version: 'v2_blockchain' });
+        await AsyncStorage.setItem(`@consent_${uid}`, 'true');
+      } catch {}
+      dispatch(setHasAcceptedConsent(true));
       dispatch(setUser({
-        uid: userCredential.user.uid,
+        uid,
         email: userCredential.user.email,
       }));
-      navigation.getParent()?.navigate('Consent');
     } catch (error: any) {
       const message = getFirebaseErrorMessage(error.code);
       showToast(message, 'error');
@@ -125,6 +141,10 @@ export default function RegisterScreen({ navigation }: any) {
   };
 
   const handleGoogleRegister = () => {
+    if (!acceptedCGU) {
+      showToast('Veuillez accepter les CGU et la politique de confidentialité.', 'warning');
+      return;
+    }
     if (!googleRequest) {
       showToast('Patientez une seconde puis réessayez.', 'info');
       return;
@@ -220,6 +240,22 @@ export default function RegisterScreen({ navigation }: any) {
               onChangeText={setConfirmPassword}
               leftIcon="lock-closed-outline"
             />
+
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setAcceptedCGU(!acceptedCGU)}
+              style={{ flexDirection: 'row', alignItems: 'center', marginTop: 24, marginBottom: 8 }}
+            >
+              <Ionicons
+                name={acceptedCGU ? "checkbox" : "square-outline"}
+                size={24}
+                color={acceptedCGU ? Colors.primary : Colors.border}
+                style={{ marginRight: 12 }}
+              />
+              <Text style={[Typography.caption, { color: Colors.textSecondary, flex: 1, lineHeight: 18 }]}>
+                J'accepte les <Text style={{ color: Colors.primary, textDecorationLine: 'underline' }} onPress={(e) => { e.stopPropagation(); navigation.navigate('CGU'); }}>Conditions Générales (CGU)</Text> et le traitement de mes données de santé.
+              </Text>
+            </TouchableOpacity>
             
             <View className="mt-8">
               <GradientButton 

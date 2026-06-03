@@ -101,11 +101,6 @@ export default function RootNavigator() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!isAuthenticated ? (
           <Stack.Screen name="Auth" component={AuthNavigator} />
-        ) : !hasAcceptedConsent ? (
-          <>
-            <Stack.Screen name="Consent" component={ConsentScreen} />
-            <Stack.Screen name="CGU" component={CGUScreen} />
-          </>
         ) : !isBiometricVerified ? (
           <Stack.Screen name="Biometric" component={FaceIDScreen} />
         ) : !activeProfileId ? (

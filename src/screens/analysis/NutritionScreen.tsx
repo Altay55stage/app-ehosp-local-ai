@@ -31,12 +31,12 @@ export default function NutritionScreen({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
-      <View style={{ paddingHorizontal: 24, paddingVertical: 16, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.1)' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
+      <View style={{ paddingHorizontal: 24, paddingVertical: 16, flexDirection: 'row', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: Colors.border, backgroundColor: Colors.surface }}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 16 }} accessibilityRole="button" accessibilityLabel="Retour">
-          <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          <Ionicons name="arrow-back" size={24} color={Colors.textPrimary} />
         </TouchableOpacity>
-        <Text style={[Typography.h3, { color: '#FFFFFF' }]}>Nutrition IA</Text>
+        <Text style={[Typography.h3, { color: Colors.textPrimary }]}>Nutrition IA</Text>
       </View>
 
       <ScrollView style={{ flex: 1 }}>
@@ -64,7 +64,7 @@ export default function NutritionScreen({ navigation }: any) {
           {loading && (
             <View style={{ alignItems: 'center', paddingVertical: 40 }}>
               <ActivityIndicator color={Colors.info} size="large" />
-              <Text style={[Typography.caption, { marginTop: 16, color: '#94A3B8' }]}>Analyse nutritionnelle en cours...</Text>
+              <Text style={[Typography.caption, { marginTop: 16, color: Colors.textSecondary }]}>Analyse nutritionnelle en cours...</Text>
             </View>
           )}
 
@@ -72,23 +72,23 @@ export default function NutritionScreen({ navigation }: any) {
             <>
               <View style={{ backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primary + '30', borderRadius: 24, padding: 24, marginBottom: 24 }}>
                 <Text style={[Typography.caption, { color: Colors.primary, textTransform: 'uppercase' }]}>Plat détecté</Text>
-                <Text style={[Typography.h1, { color: '#FFFFFF', marginTop: 4 }]}>{analysis.meal}</Text>
+                <Text style={[Typography.h1, { color: Colors.textPrimary, marginTop: 4 }]}>{analysis.meal}</Text>
                 <View style={{ flexDirection: 'row', marginTop: 24, justifyContent: 'space-between' }}>
                   {[{ val: analysis.calories, label: 'KCAL' }, { val: `${analysis.macros.p}g`, label: 'PROT' }, { val: `${analysis.macros.g}g`, label: 'GLUC' }, { val: `${analysis.macros.l}g`, label: 'LIPID' }].map((item) => (
                     <View key={item.label} style={{ alignItems: 'center' }}>
-                      <Text style={{ fontSize: 20, fontWeight: '700', color: '#FFFFFF' }}>{item.val}</Text>
-                      <Text style={[Typography.caption, { color: '#94A3B8', fontSize: 10 }]}>{item.label}</Text>
+                      <Text style={{ fontSize: 20, fontWeight: '700', color: Colors.textPrimary }}>{item.val}</Text>
+                      <Text style={[Typography.caption, { color: Colors.textSecondary, fontSize: 10 }]}>{item.label}</Text>
                     </View>
                   ))}
                 </View>
               </View>
 
-              <View style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', borderRadius: 24, padding: 24 }}>
+              <View style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: 24, padding: 24, ...Shadows.sm }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
                   <Ionicons name="bulb" size={20} color={Colors.warning} />
-                  <Text style={[Typography.bodyMedium, { color: '#FFFFFF', marginLeft: 8 }]}>Conseil Diététique</Text>
+                  <Text style={[Typography.bodyMedium, { color: Colors.textPrimary, marginLeft: 8 }]}>Conseil Diététique</Text>
                 </View>
-                <Text style={{ color: '#CBD5E1', lineHeight: 24 }}>{analysis.advice}</Text>
+                <Text style={{ color: Colors.textSecondary, lineHeight: 24 }}>{analysis.advice}</Text>
               </View>
             </>
           )}

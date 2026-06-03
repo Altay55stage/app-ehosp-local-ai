@@ -24,14 +24,23 @@ export default function ConsentScreen({ navigation }: any) {
   const saveConsent = useCallback(async () => {
     if (!user || !canContinue) return;
     setIsSubmitting(true);
+    let success = false;
     try {
       await set(ref(db, `users/${user.uid}/onboarding/consent`), { accepted: true, acceptedAt: Date.now(), version: 'v2_blockchain' });
-    } catch {}
-    try {
       await AsyncStorage.setItem(`@consent_${user.uid}`, 'true');
-    } catch {}
-    setIsSubmitting(false);
-    dispatch(setHasAcceptedConsent(true));
+      success = true;
+    } catch {
+      success = false;
+    }
+
+    if (success) {
+      // Delay dispatch slightly to let the current event handlers/renders settle, preventing unmounted context crashes.
+      setTimeout(() => {
+        dispatch(setHasAcceptedConsent(true));
+      }, 100);
+    } else {
+      setIsSubmitting(false);
+    }
   }, [user, canContinue, dispatch]);
 
   const CheckBox = ({ checked, onPress, children }: { checked: boolean; onPress: () => void; children: React.ReactNode }) => (

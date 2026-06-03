@@ -43,7 +43,6 @@ export default function LoginScreen({ navigation }: any) {
             uid: userCredential.user.uid,
             email: userCredential.user.email,
           }));
-          navigation.getParent()?.navigate('Consent');
         })
         .catch(() => {
           showToast('Erreur de connexion Google. Réessayez.', 'error');
@@ -82,7 +81,6 @@ export default function LoginScreen({ navigation }: any) {
         uid: userCredential.user.uid, 
         email: userCredential.user.email, 
       }));
-      navigation.getParent()?.navigate('Consent');
     } catch (error: any) {
       const message = getFirebaseErrorMessage(error.code);
       showToast(message, 'error');

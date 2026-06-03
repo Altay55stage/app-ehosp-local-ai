@@ -7,6 +7,7 @@ import { db, ref, get, child } from '../services/FirebaseService';
 import { NotificationService } from '../services/NotificationService';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Colors } from '../theme';
 import HomeScreen from '../screens/home/HomeScreen';
 import ChatScreen from '../screens/chat/ChatScreen';
 import MedicalTimelineScreen from '../screens/records/MedicalTimelineScreen';

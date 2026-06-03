@@ -55,7 +55,14 @@ export default function GradientButton({
         activeOpacity={isDisabled ? 1 : 0.8}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
-        className={`overflow-hidden rounded-2xl ${isDisabled ? '' : 'shadow-lg'} ${className}`}
+        className={`overflow-hidden rounded-2xl ${className}`}
+        style={!isDisabled ? {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 4,
+          elevation: 2,
+        } : undefined}
         accessibilityRole="button"
         accessibilityState={{ disabled: isDisabled, busy: loading }}
         accessibilityLabel={displayText}

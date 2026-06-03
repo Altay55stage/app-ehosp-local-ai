@@ -50,37 +50,37 @@ export default function SubscriptionScreen({ navigation }: any) {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <ScrollView style={{ flex: 1, paddingHorizontal: 24 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: 40, height: 40, borderRadius: 999, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' }}
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ width: 40, height: 40, borderRadius: 999, backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, alignItems: 'center', justifyContent: 'center', ...Shadows.sm }}
             accessibilityRole="button" accessibilityLabel="Fermer">
-            <Ionicons name="close" size={24} color="#FFFFFF" />
+            <Ionicons name="close" size={24} color={Colors.textPrimary} />
           </TouchableOpacity>
           <TouchableOpacity onPress={handleRestore}>
-            <Text style={[Typography.bodyMedium, { color: '#94A3B8' }]}>Restaurer</Text>
+            <Text style={[Typography.bodyMedium, { color: Colors.textSecondary }]}>Restaurer</Text>
           </TouchableOpacity>
         </View>
 
         <View style={{ alignItems: 'center', marginTop: 32 }}>
-          <View style={{ backgroundColor: Colors.primary + '20', paddingHorizontal: 16, paddingVertical: 6, borderRadius: 999, borderWidth: 1, borderColor: Colors.primary + '40', marginBottom: 16 }}>
+          <View style={{ backgroundColor: Colors.primaryLight, paddingHorizontal: 16, paddingVertical: 6, borderRadius: 999, borderWidth: 1, borderColor: Colors.primary + '40', marginBottom: 16 }}>
             <Text style={[Typography.caption, { color: Colors.primary, textTransform: 'uppercase', letterSpacing: 2 }]}>eHosp Premium</Text>
           </View>
-          <Text style={[Typography.h1, { color: '#FFFFFF', textAlign: 'center' }]}>Débloquez la médecine du futur.</Text>
-          <Text style={[Typography.body, { color: '#94A3B8', textAlign: 'center', marginTop: 16, paddingHorizontal: 16, lineHeight: 26 }]}>
+          <Text style={[Typography.h1, { color: Colors.textPrimary, textAlign: 'center' }]}>Débloquez la médecine du futur.</Text>
+          <Text style={[Typography.body, { color: Colors.textSecondary, textAlign: 'center', marginTop: 16, paddingHorizontal: 16, lineHeight: 26 }]}>
             Accès illimité à l'intelligence artificielle médicale la plus avancée.
           </Text>
         </View>
 
         <View style={{ marginTop: 40, gap: 16 }}>
           {FEATURES.map((f) => (
-            <View key={f.icon} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.05)', padding: 16, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
-              <View style={{ width: 40, height: 40, borderRadius: 999, backgroundColor: Colors.primary + '20', alignItems: 'center', justifyContent: 'center', marginRight: 16 }}>
-                <Ionicons name={f.icon as any} size={20} color="#38BDF8" />
+            <View key={f.icon} style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surface, padding: 16, borderRadius: 16, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}>
+              <View style={{ width: 40, height: 40, borderRadius: 999, backgroundColor: Colors.primaryLight, alignItems: 'center', justifyContent: 'center', marginRight: 16 }}>
+                <Ionicons name={f.icon as any} size={20} color={Colors.primary} />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>{f.title}</Text>
-                <Text style={[Typography.caption, { color: '#94A3B8', marginTop: 2 }]}>{f.desc}</Text>
+                <Text style={[Typography.bodyMedium, { color: Colors.textPrimary }]}>{f.title}</Text>
+                <Text style={[Typography.caption, { color: Colors.textSecondary, marginTop: 2 }]}>{f.desc}</Text>
               </View>
             </View>
           ))}
@@ -92,16 +92,16 @@ export default function SubscriptionScreen({ navigation }: any) {
           ) : packages.map((pack) => (
             <TouchableOpacity key={pack.identifier} onPress={() => setSelectedPackageId(pack.identifier)}
               style={{ borderRadius: 24, padding: 20, marginBottom: 16, borderWidth: 2, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-                borderColor: selectedPackageId === pack.identifier ? Colors.primary : 'rgba(255,255,255,0.1)',
-                backgroundColor: selectedPackageId === pack.identifier ? Colors.primary + '15' : 'rgba(255,255,255,0.05)',
-                ...(selectedPackageId === pack.identifier ? Shadows.lg : {}) }}
+                borderColor: selectedPackageId === pack.identifier ? Colors.primary : Colors.border,
+                backgroundColor: selectedPackageId === pack.identifier ? Colors.primaryLight : Colors.surface,
+                ...Shadows.sm }}
               accessibilityRole="radio" accessibilityState={{ selected: selectedPackageId === pack.identifier }}>
               <View>
-                <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>{pack.product.title}</Text>
+                <Text style={[Typography.bodyMedium, { color: Colors.textPrimary }]}>{pack.product.title}</Text>
                 <Text style={{ fontSize: 24, fontWeight: '900', color: Colors.primary, marginTop: 4 }}>{pack.product.priceString}</Text>
               </View>
               <View style={{ width: 24, height: 24, borderRadius: 999, borderWidth: 2, alignItems: 'center', justifyContent: 'center',
-                borderColor: selectedPackageId === pack.identifier ? Colors.primary : 'rgba(255,255,255,0.3)' }}>
+                borderColor: selectedPackageId === pack.identifier ? Colors.primary : Colors.border }}>
                 {selectedPackageId === pack.identifier && <View style={{ width: 12, height: 12, borderRadius: 999, backgroundColor: Colors.primary }} />}
               </View>
             </TouchableOpacity>
@@ -109,8 +109,8 @@ export default function SubscriptionScreen({ navigation }: any) {
         </View>
 
         <View style={{ marginTop: 24, marginBottom: 48 }}>
-          <GradientButton title={loading ? "Sécurisation..." : "S'abonner maintenant"} onPress={handleSubscribe} disabled={loading || !selectedPackageId} loading={loading} colors={[Colors.info, '#0369A1']} />
-          <Text style={[Typography.caption, { textAlign: 'center', marginTop: 16, lineHeight: 18 }]}>
+          <GradientButton title={loading ? "Sécurisation..." : "S'abonner maintenant"} onPress={handleSubscribe} disabled={loading || !selectedPackageId} loading={loading} colors={[Colors.primary, Colors.primaryDark]} />
+          <Text style={[Typography.caption, { textAlign: 'center', marginTop: 16, lineHeight: 18, color: Colors.textSecondary }]}>
             Abonnement récurrent. Annulable à tout moment. En vous abonnant, vous acceptez nos CGU.
           </Text>
         </View>

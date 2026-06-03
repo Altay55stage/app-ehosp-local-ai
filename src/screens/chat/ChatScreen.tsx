@@ -318,22 +318,6 @@ export default function ChatScreen({ navigation }: any) {
       Alert.alert("Session invalide", "Reconnectez-vous et re-selectionnez un profil.");
       return;
     }
-    // QOTA GRATUIT (Freemium logic)
-    const currentSubscription = user?.subscription || 'free'; 
-    const FREE_LIMIT = 5;
-    
-    const isAllFree = process.env.EXPO_PUBLIC_ALL_FREE === 'true';
-    if (!isAllFree && currentSubscription === 'free' && messages.filter(m => m.isUser).length >= FREE_LIMIT) {
-      Alert.alert(
-        "🏥 Quota Atteint",
-        "L'Intelligence Médicale eHosp 5.0 nécessite d'énormes ressources pour fonctionner localement sur votre appareil. Vous avez atteint votre limite gratuite.\n\nPassez au Premium pour continuer à consulter le Dr. IA en illimité.",
-        [
-          { text: "Annuler", style: "cancel" },
-          { text: "⭐ Passer au Premium", onPress: () => navigation.navigate('Subscription') }
-        ]
-      );
-      return;
-    }
     const generateId = () => `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
     const userMsg = {
