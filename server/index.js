@@ -226,17 +226,100 @@ app.patch('/api/consultations/:id', (req, res) => {
   }
 });
 
+// Patients (stored in users table in local mode)
+app.post('/api/patients', (req, res) => {
+  const patient = req.body;
+  try {
+    const existing = dbManager.getUser(patient.id);
+    if (existing) {
+      const keys = Object.keys(patient).filter(k => k !== 'id');
+      if (keys.length > 0) {
+        const sets = keys.map(k => `${k} = ?`).join(', ');
+        const values = keys.map(k => patient[k]);
+        values.push(patient.id);
+        dbManager.db.prepare(`UPDATE users SET ${sets} WHERE uid = ?`).run(...values);
+      }
+    } else {
+      dbManager.createUser(patient.id, patient.email || '', '', patient.role || 'patient');
+    }
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/patients/:id', (req, res) => {
+  const { id } = req.params;
+  try {
+    const patient = dbManager.getUser(id);
+    if (!patient) return res.status(404).json({ error: "Patient introuvable" });
+    res.json(patient);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Doctors
 app.get('/api/doctors', (req, res) => {
-  const { specialization } = req.query;
+  const { specialization, status } = req.query;
   try {
     let list;
     if (specialization) {
       list = dbManager.getDoctorsBySpecialty(specialization);
+    } else if (status) {
+      list = dbManager.db.prepare("SELECT * FROM doctors WHERE status = ?").all(status);
     } else {
       list = dbManager.db.prepare("SELECT * FROM doctors").all();
     }
     res.json(list);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/doctors/:id', (req, res) => {
+  const { id } = req.params;
+  try {
+    const doctor = dbManager.db.prepare("SELECT * FROM doctors WHERE uid = ?").get(id);
+    if (!doctor) return res.status(404).json({ error: "Médecin introuvable" });
+    res.json(doctor);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/doctors', (req, res) => {
+  const doctor = req.body;
+  try {
+    const docData = { uid: doctor.id || doctor.uid, ...doctor };
+    delete docData.id;
+    dbManager.saveDoctor(docData);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.patch('/api/doctors/:id', (req, res) => {
+  const { id } = req.params;
+  const updateFields = req.body;
+  try {
+    const keys = Object.keys(updateFields);
+    if (keys.length > 0) {
+      const sets = keys.map(k => `${k} = ?`).join(', ');
+      const values = keys.map(k => updateFields[k]);
+      values.push(id);
+      dbManager.db.prepare(`UPDATE doctors SET ${sets} WHERE uid = ?`).run(...values);
+      
+      // Sync user status and role
+      if (updateFields.status) {
+        dbManager.db.prepare("UPDATE users SET status = ? WHERE uid = ?").run(updateFields.status, id);
+      }
+      if (updateFields.role) {
+        dbManager.db.prepare("UPDATE users SET role = ? WHERE uid = ?").run(updateFields.role, id);
+      }
+    }
+    res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

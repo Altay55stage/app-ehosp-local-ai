@@ -332,7 +332,7 @@ export async function localGetDocs(queryObj: any) {
   
   const params: any = {};
   constraints.forEach((c: any) => {
-    if (c.field === 'patientId' || c.field === 'doctorId') {
+    if (c.field) {
       params[c.field] = c.value;
     }
   });

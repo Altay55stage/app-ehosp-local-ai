@@ -103,13 +103,36 @@ class DatabaseManager {
       CREATE TABLE IF NOT EXISTS doctors (
         uid TEXT PRIMARY KEY,
         name TEXT,
+        email TEXT,
         specialization TEXT,
+        licenseUrl TEXT,
+        experience TEXT,
+        bio TEXT,
+        status TEXT DEFAULT 'approved',
+        submittedAt INTEGER,
         isVerified INTEGER DEFAULT 1,
         isAvailable INTEGER DEFAULT 1,
         expoPushToken TEXT,
         totalEarnings REAL DEFAULT 0.0
       )
     `);
+
+    // Migrate existing DB schemas
+    const migrations = [
+      "ALTER TABLE doctors ADD COLUMN email TEXT",
+      "ALTER TABLE doctors ADD COLUMN licenseUrl TEXT",
+      "ALTER TABLE doctors ADD COLUMN experience TEXT",
+      "ALTER TABLE doctors ADD COLUMN bio TEXT",
+      "ALTER TABLE doctors ADD COLUMN status TEXT DEFAULT 'approved'",
+      "ALTER TABLE doctors ADD COLUMN submittedAt INTEGER"
+    ];
+    migrations.forEach(cmd => {
+      try {
+        this.db.exec(cmd);
+      } catch (err) {
+        // Column already exists
+      }
+    });
 
     // Table: RAG Chunks (for local vector similarity search)
     this.db.exec(`
@@ -141,6 +164,21 @@ class DatabaseManager {
       insert.run('doc_4', 'Dr. Moretti (Neurologue)', '🧠 Neurologie');
       insert.run('doc_5', 'Dr. Fischer (Généraliste)', '👨‍⚕️ Généraliste');
       console.log("sqlite: Doctors seeded successfully!");
+    }
+
+    // Seed admin user
+    try {
+      const userCount = this.db.prepare("SELECT COUNT(*) as count FROM users WHERE email = ?").get('altayinvestpro@gmail.com');
+      if (userCount.count === 0) {
+        console.log("sqlite: Seeding admin user account...");
+        this.db.prepare(`
+          INSERT INTO users (uid, email, password, role, status, subscription)
+          VALUES (?, ?, ?, 'admin', 'approved', 'premium')
+        `).run('admin_uid', 'altayinvestpro@gmail.com', 'admin123!');
+        console.log("sqlite: Admin account created! Email: altayinvestpro@gmail.com, Pass: admin123!");
+      }
+    } catch (err) {
+      console.error("sqlite: Seeding admin user failed:", err.message);
     }
   }
 
@@ -300,6 +338,32 @@ class DatabaseManager {
   // Doctor planning
   getDoctorsBySpecialty(spec) {
     return this.db.prepare("SELECT * FROM doctors WHERE specialization LIKE ? AND isVerified = 1 AND isAvailable = 1").all(`%${spec}%`);
+  }
+
+  saveDoctor(doctor) {
+    const existing = this.db.prepare("SELECT * FROM doctors WHERE uid = ?").get(doctor.uid);
+    if (existing) {
+      const keys = Object.keys(doctor).filter(k => k !== 'uid');
+      if (keys.length > 0) {
+        const sets = keys.map(k => `${k} = ?`).join(', ');
+        const values = keys.map(k => doctor[k]);
+        values.push(doctor.uid);
+        this.db.prepare(`UPDATE doctors SET ${sets} WHERE uid = ?`).run(...values);
+      }
+    } else {
+      const keys = Object.keys(doctor);
+      const placeholders = keys.map(() => '?').join(', ');
+      const columns = keys.join(', ');
+      const values = keys.map(k => doctor[k]);
+      this.db.prepare(`INSERT INTO doctors (${columns}) VALUES (${placeholders})`).run(...values);
+    }
+    // Sync user role and status if present
+    if (doctor.role) {
+      this.db.prepare("UPDATE users SET role = ? WHERE uid = ?").run(doctor.role, doctor.uid);
+    }
+    if (doctor.status) {
+      this.db.prepare("UPDATE users SET status = ? WHERE uid = ?").run(doctor.status, doctor.uid);
+    }
   }
 }
 
