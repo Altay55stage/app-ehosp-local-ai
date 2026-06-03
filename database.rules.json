@@ -1,0 +1,83 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        
+        "profile": {
+          ".validate": "newData.hasChildren(['birthDate', 'gender', 'country']) && newData.child('birthDate').isString() && newData.child('gender').isString() && newData.child('country').isString()"
+        },
+        
+        "email": {
+          ".validate": "newData.isString() && newData.val().matches(/^[^@]+@[^@]+\\.[^@]+$/)"
+        },
+        
+        "subscription": {
+          ".validate": "newData.isString() && newData.val().matches(/^(free|etudiant|individuel|familiale)$/)"
+        }
+      }
+    },
+    
+    "conversations": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        
+        "$chatId": {
+          ".indexOn": ["lastMessageAt", "status"],
+          
+          "messages": {
+            "$msgId": {
+              ".validate": "newData.hasChildren(['role', 'content', 'timestamp'])",
+              
+              "role": {
+                ".validate": "newData.isString() && (newData.val() === 'user' || newData.val() === 'assistant')"
+              },
+              
+              "content": {
+                ".validate": "newData.isString() && newData.val().length <= 5000"
+              },
+              
+              "timestamp": {
+                ".validate": "newData.isNumber() || newData.isString()"
+              }
+            }
+          }
+        }
+      }
+    },
+    
+    "medical_records": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        
+        ".validate": "newData.hasChildren(['allergies', 'chronic_conditions', 'medications'])"
+      }
+    },
+    
+    "subscriptions": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    
+    "analytics": {
+      ".read": "auth.uid === 'ADMIN_UID_HERE'",
+      ".write": "auth.uid === 'ADMIN_UID_HERE'"
+    },
+    
+    "prompt_counts": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000"
+      }
+    }
+  }
+}

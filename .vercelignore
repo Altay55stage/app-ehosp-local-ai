@@ -1,0 +1,39 @@
+# Ignore common large/build folders and secrets for Vercel deploy
+node_modules/
+**/node_modules/
+functions/node_modules/
+*.log
+.vscode/
+.DS_Store
+.git/
+.gitignore
+.env
+.env.*
+.expo/
+.expo-shared/
+ios/
+android/
+Pods/
+android/**
+ios/**
+build/
+dist/
+.webpack/
+web-build/
+*.tgz
+*.keystore
+*.xcworkspace
+*.xcodeproj
+**/build/
+**/out/
+**/.next/
+**/public/build/
+**/Local Podspecs/
+**/Pods/
+**/hermes-engine/
+**/Pods/**
+**/node_modules/**
+assets/**
+# Keep vercel folder and api folder for Vercel serverless functions
+!vercel/**
+!api/**

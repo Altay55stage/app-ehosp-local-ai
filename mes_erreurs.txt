@@ -1,0 +1,63 @@
+env: load .env
+env: export EXPO_PUBLIC_FIREBASE_API_KEY EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN EXPO_PUBLIC_FIREBASE_DATABASE_URL EXPO_PUBLIC_FIREBASE_PROJECT_ID EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID EXPO_PUBLIC_FIREBASE_APP_ID EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY EXPO_PUBLIC_AZURE_AI_ENDPOINT EXPO_PUBLIC_LOCAL_IP EXPO_PUBLIC_AZURE_AI_KEY EXPO_PUBLIC_AZURE_AI_MODEL EXPO_PUBLIC_AZURE_COGNITIVE_ENDPOINT EXPO_PUBLIC_AZURE_COGNITIVE_KEY EXPO_PUBLIC_AZURE_REALTIME_ENDPOINT EXPO_PUBLIC_AZURE_REALTIME_KEY EXPO_PUBLIC_AZURE_REALTIME_MODEL EXPO_PUBLIC_POLYGON_RPC EXPO_PUBLIC_EHOSP_CONTRACT_ADDRESS EXPO_PUBLIC_BACKEND_URL EXPO_PUBLIC_ALL_FREE EXPO_PUBLIC_MAX_FAMILY_PROFILES
+Starting project at /Users/altaycevik/Desktop/app-ehosp
+Starting Metro Bundler
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+iOS ./index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+iOS Bundled 849ms index.ts (1735 modules)
+ WARN  [expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality.
+ WARN  Method getInfoAsync imported from "expo-file-system" is deprecated.
+You can migrate to the new filesystem API using "File" and "Directory" classes or import the legacy API from "expo-file-system/legacy".
+API reference and examples are available in the filesystem docs: https://docs.expo.dev/versions/v54.0.0/sdk/filesystem/
+ WARN  [2026-05-28T12:45:17.316Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:45:17.641Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:45:18.876Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:45:20.698Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:45:23.221Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:45:25.924Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  Method getInfoAsync imported from "expo-file-system" is deprecated.
+You can migrate to the new filesystem API using "File" and "Directory" classes or import the legacy API from "expo-file-system/legacy".
+API reference and examples are available in the filesystem docs: https://docs.expo.dev/versions/v54.0.0/sdk/filesystem/
+ ERROR  [Error: Couldn't find a navigation context. Have you wrapped your app with 'NavigationContainer'? See https://reactnavigation.org/docs/getting-started for setup instructions.]
+ WARN  [2026-05-28T12:45:30.731Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:45:37.105Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ DEBUG  Notification channels feature is only supported on Android.
+ DEBUG  Notification channels feature is only supported on Android.
+ LOG  ✅ Push notifications initialized
+ WARN  Method getInfoAsync imported from "expo-file-system" is deprecated.
+You can migrate to the new filesystem API using "File" and "Directory" classes or import the legacy API from "expo-file-system/legacy".
+API reference and examples are available in the filesystem docs: https://docs.expo.dev/versions/v54.0.0/sdk/filesystem/
+ WARN  [2026-05-28T12:46:53.328Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:46:53.582Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ DEBUG  Notification channels feature is only supported on Android.
+ DEBUG  Notification channels feature is only supported on Android.
+ LOG  ✅ Push notifications initialized
+iOS ./index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+iOS Bundled 100ms index.ts (1 module)
+ WARN  [expo-av]: Expo AV has been deprecated and will be removed in SDK 54. Use the `expo-audio` and `expo-video` packages to replace the required functionality.
+ WARN  Method getInfoAsync imported from "expo-file-system" is deprecated.
+You can migrate to the new filesystem API using "File" and "Directory" classes or import the legacy API from "expo-file-system/legacy".
+API reference and examples are available in the filesystem docs: https://docs.expo.dev/versions/v54.0.0/sdk/filesystem/
+ WARN  [2026-05-28T12:47:50.070Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:47:50.410Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:47:51.490Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:47:52.693Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:47:55.329Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:47:59.972Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:48:03.711Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:48:11.529Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ DEBUG  Notification channels feature is only supported on Android.
+ DEBUG  Notification channels feature is only supported on Android.
+ LOG  ✅ Push notifications initialized
+ WARN  [2026-05-28T12:48:23.538Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:48:23.777Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:48:24.362Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:48:26.422Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:48:28.389Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:48:31.264Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:48:36.088Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ WARN  [2026-05-28T12:48:44.725Z]  @firebase/firestore: Firestore (12.13.0): Database '(default)' not found. Please check your project configuration.
+ DEBUG  Notification channels feature is only supported on Android.
+ DEBUG  Notification channels feature is only supported on Android.
+ LOG  ✅ Push notifications initialized

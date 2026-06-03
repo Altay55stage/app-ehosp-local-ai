@@ -31,7 +31,11 @@ yarn-error.*
 *.pem
 
 # local env files
-.env*.local
+.env
+.env*
+server/.env
+server/ehosp.db*
+/server/node_modules/
 
 # typescript
 *.tsbuildinfo
@@ -39,3 +43,4 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+.vercel
