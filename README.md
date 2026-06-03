@@ -1,75 +1,158 @@
-# 🏥 eHosp - Local Enterprise AI Architecture
+# eHosp - Assistant IA santé avec RAG et MCP
 
-eHosp est une architecture d'application médicale mobile de pointe, conçue pour démontrer la faisabilité et la puissance d'une solution de santé **100% locale, souveraine et hautement sécurisée (Zero-Cloud)** sur Mac et iPhone. 
-
-Ce projet a été développé en combinant les dernières technologies d'IA générative : l'**API Mistral AI** (technologie souveraine française), un pipeline de **RAG vectoriel réel** (calculé localement) et le protocole standardisé **MCP (Model Context Protocol)** d'Anthropic pour connecter le LLM aux données métiers et outils d'entreprise.
+eHosp est une architecture de démonstration orientée IA médicale, conçue pour coupler une interface mobile moderne avec un orchestrateur clinique intelligent et autonome, s'appuyant sur des protocoles de connaissances cliniques rigoureux (RAG) et une exécution normalisée d'outils (MCP).
 
 ---
 
-## 🛠️ Architecture du Système
+## Objectif du projet
 
-Le système est découplé en un client mobile réactif au design premium "Revolut-like" et un serveur d'orchestration agentique local :
+L’objectif d’eHosp est de démontrer comment une application mobile de santé peut connecter un utilisateur à un assistant IA capable de :
 
-```mermaid
-graph TD
-    A[Client React Native / Expo] -->|1. Requêtes HTTP REST / JSON| B(Serveur Express Local :3000)
-    B -->|2. Lecture/Écriture Métiers| C[(SQLite : ehosp.db)]
-    
-    %% Orchestration RAG & MCP
-    B -->|3. Calcul d'Embeddings| D[Mistral Embeddings API]
-    D -->|4. Recherche Similarité Cosinus| E[(Vecteurs RAG SQLite)]
-    B -->|5. Client MCP Stdio| F[Serveur MCP Réel :3001]
-    F -->|6. Exécution Outils Cliniques| C
-    
-    %% Complétion finale
-    B -->|7. Complétion & Function Calling| G[API Mistral AI]
-    G -.->|Retour réponse enrichie| B
+- **Structurer une demande médicale** : Évaluation initiale des symptômes et triage automatisé.
+- **Contextualiser la réponse** avec des documents métiers : Interrogation en temps réel des recommandations de la Haute Autorité de Santé (HAS).
+- **Consulter des données patient locales** : Exploitation de l'historique et des constantes stockées hors-ligne.
+- **Vérifier la disponibilité** d’un professionnel de santé : Planification dynamique et de garde des médecins spécialistes.
+- **Préparer une orientation** ou une prise de rendez-vous automatique en cas de besoin avéré.
+
+*L’application ne vise pas à remplacer un médecin. Elle sert de démonstrateur d’architecture IA pour l’orientation, la structuration de l’information et l’aide à la décision.*
+
+---
+
+## Positionnement
+
+eHosp est une architecture de démonstration orientée IA médicale, conçue pour limiter au maximum la dépendance aux services cloud côté données métier.
+
+Les données applicatives sensibles (dossiers médicaux, constantes, historiques) sont stockées localement dans SQLite. La couche LLM et embeddings utilise actuellement l’API Mistral AI pour la démonstration, avec une architecture prévue pour pouvoir être remplacée par un modèle local (ex. Llama-3-8B sur Mac/serveur souverain) selon les contraintes réglementaires et de sécurité.
+
+---
+
+## Architecture globale
+
+```text
+       [ Application mobile Expo / React Native ]
+                           |
+                           v  (Requêtes HTTP REST)
+             [ API Backend Express.js ]
+                           |
+       ---------------------------------------------
+       |                                           |
+       v  (Lecture / Écriture)                     v
+[ SQLite local : ehosp.db ]                [ Orchestrateur IA ]
+       |                                           |
+       |                            ---------------------------------
+       |                            |                               |
+       v                            v                               v
+[ Données patient ]             [ RAG HAS ]                   [ Client MCP ]
+                                                            (Stdio Transport)
+                                                                    |
+                                                                    v
+                                                            [ Serveur MCP Réel ]
+                                                                    |
+                                                      [ Outils métier exposés au LLM ]
+                                                      - get_patient_history
+                                                      - check_doctor_planning
+                                                      - search_medical_guidelines
+                                                      - create_appointment
 ```
 
-### Points Clés de l'Architecture
-1. **Stockage Local Intégral :** Bypassement total des services cloud externes (ex: Firebase). Toutes les données (profils de santé, historiques de chat, messages, consultations, médecins) sont hébergées en local dans une base de données **SQLite réelle** (`ehosp.db`) gérée nativement par le runtime Node.js (sans dépendance binaire externe lourde).
-2. **RAG Vectoriel Réel :** Les guides cliniques de la HAS (Haute Autorité de Santé) sont découpés et stockés dans la base. Une recherche par similarité cosinus réelle est effectuée via l'API `mistral-embed` de Mistral AI au démarrage et lors de chaque message utilisateur pour contextualiser les réponses de l'IA (Grounding clinique).
-3. **Protocole MCP Réel (Model Context Protocol) :** Un serveur MCP indépendant est lancé en sous-processus stdio. Il expose 4 outils normalisés permettant au LLM d'agir en autonomie sur le système d'information de l'hôpital (consulter les plannings, réserver des consultations, modifier des dossiers patients).
-4. **Design Revolut-style & Gratuité :** Interface mobile sombre premium, avec des effets de transparence (glassmorphism), des micro-animations réactives et un contournement total des verrous d'abonnement pour une démonstration fluide et 100% gratuite.
+Cette architecture sépare clairement l’interface utilisateur, la logique backend, la base de données locale, la couche RAG et les outils MCP. L’objectif est d’éviter un simple appel direct au LLM et de construire une application IA réellement intégrée à un système métier existant.
 
 ---
 
-## 📂 Structure du Code source
+## Stack technique
 
-* `/src` : Client mobile React Native (Expo)
-  * `/src/services/FirebaseService.ts` : Intercepteur transparent redirigeant les requêtes Firebase vers l'API SQLite locale.
-  * `/src/ai/AgentOrchestrator.ts` : Orchestrateur client envoyant les prompts au backend et simulant un streaming fluide token-par-token.
-  * `/src/screens/chat/ChatScreen.tsx` : Interface de discussion avec sélecteurs de spécialistes (Cardiologue, Dermatologue, etc.) et bandeaux d'urgence.
-* `/server` : Serveur d'orchestration et de données (Express)
-  * `index.js` : Point d'entrée de l'API Express, client MCP et pipeline de chat agentique.
-  * `mcp-server.js` : Serveur MCP implémentant le protocole standardisé et les outils.
-  * `database.js` : Gestionnaire de base de données SQLite utilisant le module natif et performant de Node.js v22+.
-  * `rag.js` : Moteur d'indexation vectorielle RAG et de recherche par similarité cosinus.
-  * `/rag_documents/` : Fiches de protocoles officiels de la HAS (Urgences, Diabète, HTA).
+- **Client Mobile** : Expo SDK 54 / React Native, Redux Toolkit, TailwindCSS (NativeWind), Lottie Animations.
+- **Backend API** : Node.js, Express, SQLite (`node:sqlite` natif de Node.js v24+, WAL mode).
+- **IA & NLP** : API Mistral AI (`open-mistral-7b`, `mistral-embed`).
+- **Protocole d'Outils** : Model Context Protocol (MCP SDK d'Anthropic).
+- **Sécurité locale** : LocalAuthentication (FaceID/TouchID), AsyncStorage pour le cache de session.
 
 ---
 
-## 🔧 Installation et Lancement local
+## RAG et MCP : rôle dans l’architecture
 
-### Prérequis
-- **Node.js v22.5.0** ou supérieur (requis pour le module natif `node:sqlite`).
-- **npm** installé.
-- Une clé **API Mistral AI** valide (intégrée par défaut dans la démo).
-- Pour exécuter sur iPhone : **Xcode** (macOS uniquement) ou l'application **Expo Go** (App Store).
+### RAG (Retrieval-Augmented Generation)
+Le RAG permet d’enrichir les réponses du modèle avec des documents métier contrôlés pour éradiquer les hallucinations cliniques.
+Dans ce projet, les fiches médicales officielles de la HAS (Urgences Cardiaques, HTA, Diabète) situées dans `server/rag_documents/` sont découpées en sections au démarrage. Le backend calcule leurs embeddings via l'API `mistral-embed` et les indexe localement. Lors d'un message, une recherche sémantique par similarité cosinus extrait le contexte exact pour guider la complétion de l'IA.
+
+### MCP (Model Context Protocol)
+Le MCP permet au modèle d’interagir de manière sécurisée et normalisée avec les APIs et bases de données métiers de l'hôpital.
+Le serveur MCP s'exécute dans un processus distinct en transport Stdio. Il expose les outils et en confie la sélection et les paramètres au LLM lors de la phase de *Function Calling*.
+
+---
+
+## Outils MCP exposés
+
+- `get_patient_history` : Récupère le dossier médical complet du patient (âge, poids, antécédents, constantes).
+- `check_doctor_planning` : Recherche les spécialistes disponibles de garde dans le service demandé (ex: Cardiologue).
+- `search_medical_guidelines` : Effectue la recherche RAG vectorielle sémantique dans les guides HAS.
+- `create_appointment` : Enregistre une consultation confirmée dans la base de données SQLite.
+
+---
+
+## Fonctionnalités d'entreprise & Potentiel Investisseurs
+
+eHosp n'est pas qu'un simple outil de chat IA ; il propose des briques innovantes hautement attractives pour les partenaires et investisseurs :
+
+1. **Architecture Agentique Multi-Spécialiste** : L'IA évalue les demandes et transfère automatiquement le patient vers le spécialiste virtuel adéquat (Dermatologue, Cardiologue, etc.) avec adaptation dynamique de son prompt système.
+2. **Capteurs & IoT Locaux** : Un algorithme d'analyse optique capture la fréquence cardiaque en direct via l'appareil photo du smartphone sans aucun matériel additionnel.
+3. **Analyse Multimodale d'Ordonnances** : Un scanner de prescriptions médicale (OCR & Vision) extrait et structure les posologies des médicaments instantanément.
+4. **Analyse Nutritionnelle par Photo** : L'utilisateur photographie son repas et l'IA en extrait les valeurs nutritionnelles pour les lister dans son suivi métabolique.
+5. **Démonstrateur d'Ancrage Blockchain** : Preuve cryptographique d'inviolabilité du consentement RGPD et des bilans de santé enregistrée sur le réseau Polygon.
+6. **Design Premium Unifié (Style Revolut)** : Interface sombre raffinée, animations fluides, boutons soignés et transitions soyeuses conçues pour séduire immédiatement le client final.
+
+---
+
+## Scénario de démonstration (Entretien)
+
+Saisissez ce prompt dans le chat de l'application :
+> *"J'ai une forte douleur dans la poitrine depuis ce matin. Peux-tu regarder mes antécédents et voir si je peux consulter un spécialiste aujourd'hui ?"*
+
+**Dans la console du serveur Express, le flux technique s'exécute en cascade :**
+1. **Appel MCP `get_patient_history`** : L'IA récupère le profil de l'utilisateur stocké dans SQLite et constate qu'il a des antécédents cardiaques (ex: HTA).
+2. **Appel MCP `search_medical_guidelines`** : L'IA déclenche la recherche RAG, extrait la fiche `triage_urgences.md` sur l'infarctus, et prend conscience de la gravité des symptômes.
+3. **Alerte d'Urgence Immédiate** : L'application détecte un score de gravité clinique supérieur à 8/10 et affiche un bandeau rouge clignotant permettant d'appeler le SAMU (15) en un clic.
+4. **Appel MCP `check_doctor_planning`** : En parallèle, l'IA cherche un cardiologue de garde et trouve le *Dr. Dupuis*.
+5. **Appel MCP `create_appointment`** : L'IA pré-réserve formellement un créneau d'examen dans la base SQLite locale.
+
+---
+
+## Sécurité, limites et cadre médical
+
+Ce projet est un démonstrateur technique et ne constitue pas un dispositif médical certifié.
+
+L’IA ne pose pas de diagnostic médical. Elle sert à :
+- Structurer les informations transmises par l’utilisateur.
+- Détecter des signaux d’urgence potentiels.
+- Proposer une orientation et recommander la prise de contact avec un professionnel.
+- Pour les cas critiques, l’application priorise la prudence et l'appel aux services d'urgence.
+
+Points de vigilance prévus dans l’architecture :
+- Séparation physique des données de santé et de la couche IA générative.
+- Stockage local sur le terminal ou dans l'infrastructure de l'établissement.
+- Variables sensibles stockées dans `.env` et exclues du dépôt Git via `.gitignore`.
+- Journalisation exhaustive de tous les appels d'API.
+- Contrôle humain obligatoire avant validation d'une action critique.
+
+---
+
+## Installation locale
 
 ### 1. Configuration des variables d'environnement
-Créez ou modifiez le fichier `.env` à la **racine** du projet :
+Les clés API ne doivent jamais être versionnées. Les fichiers `.env` sont exclus du dépôt via `.gitignore`.
+
+Créez un fichier `.env` à la **racine** de l'application :
 ```env
-EXPO_PUBLIC_BACKEND_URL=http://localhost:3000
+EXPO_PUBLIC_BACKEND_URL=http://<IP_DE_VOTRE_MAC>:3000
 EXPO_PUBLIC_LOCAL_STORAGE=true
 EXPO_PUBLIC_ALL_FREE=true
-EXPO_PUBLIC_MISTRAL_API_KEY=p12DgAkX2ov4j9QzayU00HyFpO8mJxDm
+EXPO_PUBLIC_MISTRAL_API_KEY=your_mistral_api_key_here
 ```
 
-Et configurez le fichier `server/.env` dans le répertoire du serveur :
+Créez un fichier `.env` dans le dossier `server/` :
 ```env
 PORT=3000
-MISTRAL_API_KEY=p12DgAkX2ov4j9QzayU00HyFpO8mJxDm
+MISTRAL_API_KEY=your_mistral_api_key_here
 ```
 
 ### 2. Démarrage du Serveur Backend (Express + MCP + SQLite)
@@ -79,68 +162,39 @@ cd server
 npm install
 npm start
 ```
-Le serveur va :
-1. Initialiser le fichier SQLite local `ehosp.db`.
-2. Vectoriser et indexer les documents HAS locaux (RAG) via Mistral Embeddings.
-3. Démarrer le serveur MCP stdio.
-4. Écouter sur le port `3000` pour recevoir le client mobile.
+Le serveur va initialiser le fichier SQLite local `ehosp.db`, indexer les documents HAS et lancer le serveur MCP stdio.
+*Vous pouvez lancer `node test_pipeline.js` dans le dossier `server/` pour valider le serveur de façon autonome.*
 
-*Vous pouvez exécuter un test d'intégration autonome du serveur en lançant : `node test_pipeline.js` dans le dossier `server/`.*
-
-### 3. Démarrage de l'Application Mobile (Expo Go & Simulateur)
-
-#### Option A : Lancer sur le Simulateur iOS (Mac)
-À la racine du projet :
-```bash
-npm install
-npm run ios
-```
-Appuyez sur `i` dans le terminal pour démarrer l'application dans le simulateur iPhone de Xcode.
-
-#### Option B : Lancer sur votre vrai iPhone via Expo Go (Wi-Fi)
-Pour charger l'application en réseau sur votre iPhone physique, suivez scrupuleusement ces étapes :
-
-1. **Installer Expo Go :** Téléchargez l'application **Expo Go** depuis l'App Store de votre iPhone.
-2. **Même Réseau Wi-Fi :** Assurez-vous que votre Mac et votre iPhone sont connectés au **même réseau Wi-Fi**.
-3. **Trouver l'IP locale de votre Mac :**
-   - Ouvrez un terminal sur votre Mac et tapez : `ipconfig getifaddr en0` (ou `ifconfig | grep "inet "`).
-   - Notez l'adresse IP affichée (ex: `192.168.1.50`).
-4. **Mettre à jour la configuration (.env) :**
-   - Ouvrez le fichier `.env` à la racine du projet.
-   - Modifiez `EXPO_PUBLIC_BACKEND_URL` pour remplacer `localhost` par l'IP de votre Mac :
-     ```env
-     EXPO_PUBLIC_BACKEND_URL=http://192.168.1.50:3000
-     ```
-5. **Démarrer Expo en mode LAN :**
-   Démarrez Expo en forçant la liaison sur votre réseau local :
+### 3. Démarrage de l'Application Mobile (Expo Go)
+Pour charger l'application sur votre iPhone via Expo Go :
+1. Téléchargez l'application **Expo Go** depuis l'App Store.
+2. Assurez-vous que votre Mac et votre iPhone sont sur le **même réseau Wi-Fi**.
+3. Récupérez l'IP locale de votre Mac (`ipconfig getifaddr en0`).
+4. Dans le `.env` de la racine, assurez-vous que `EXPO_PUBLIC_BACKEND_URL` utilise l'IP locale du Mac (ex: `http://192.168.1.50:3000`).
+5. Lancez le client en mode local LAN :
    ```bash
    npx expo start --lan
    ```
-6. **Scanner le QR Code :**
-   - Ouvrez l'appareil photo de votre iPhone et scannez le QR Code affiché dans le terminal du Mac.
-   - Appuyez sur le lien pour ouvrir **Expo Go**. L'application se chargera et se connectera en direct au serveur SQLite de votre Mac !
+6. Scannez le QR Code affiché avec l'appareil photo de l'iPhone et ouvrez-le dans Expo Go.
 
 ---
 
-## 🤖 Les Outils MCP Exposés au LLM
+## Ce que démontre ce projet
 
-Au cours de la conversation, Mistral peut appeler de manière autonome et transparente les outils suivants en fonction du besoin clinique du patient :
-
-1. `get_patient_history` : Analyse le dossier médical complet du patient (antécédents cardiaques, diabète, allergies, poids, âge, traitements actuels) pour adapter la réponse de l'IA.
-2. `check_doctor_planning` : Interroge la base de données SQLite pour lister les médecins de garde d'une spécialité (ex: Cardiologue) et vérifier leur disponibilité en temps réel.
-3. `search_medical_guidelines` : Effectue une recherche vectorielle sémantique dans les fiches HAS locales pour appuyer les conseils cliniques sur des recommandations officielles.
-4. `create_appointment` : Planifie et pré-réserve automatiquement un rendez-vous dans la base SQLite entre le patient et le spécialiste.
+Ce projet démontre ma capacité à concevoir et implémenter une solution d'IA appliquée complète :
+- Architecture mobile multiplateforme réactive et soignée.
+- Création d'un backend REST Express avec base SQLite relationnelle.
+- Intégration avancée de LLM avec gestion d'état de conversation.
+- Mise en œuvre d'un pipeline RAG vectoriel local.
+- Implémentation du protocole MCP standardisé et manipulation d'outils métiers.
+- Alignement sur la sécurité (FaceID, stockage local) et l'explication logique (XAI).
 
 ---
 
-## 💡 Scénario de Démonstration (Pitch)
+## Évolutions prévues
 
-Saisissez ce prompt dans le chat de l'application :
-> *"J'ai une forte douleur dans la poitrine depuis ce matin. Peux-tu regarder mes antécédents et voir si je peux consulter un spécialiste aujourd'hui ?"*
-
-**Dans la console du serveur Express, vous verrez défiler en temps réel :**
-1. **Indexation RAG :** Le serveur détecte les mots-clés de douleur thoracique et extrait le protocole HAS de l'infarctus du myocarde.
-2. **Appel MCP `get_patient_history` :** Mistral interroge la base SQLite et découvre que le patient a des antécédents de diabète ou d'hypertension.
-3. **Appel MCP `check_doctor_planning` :** Mistral recherche des cardiologues disponibles et trouve le *Dr. Dupuis (Cardiologue)* de garde.
-4. **Appel MCP `create_appointment` :** L'IA prend l'initiative d'enregistrer une consultation pré-réservée dans la base SQLite locale.
-5. **Alerte d'Urgence :** Le client mobile détecte le score d'urgence de 9/10 calculé par l'IA et affiche un bandeau rouge clignotant permettant d'appeler le SAMU (15) en un clic.
+- Remplacement du LLM cloud par un modèle local (ex. Llama-3-8B) en exécution 100% hors-ligne.
+- Ajout d'une authentification biométrique forte de bout en bout.
+- Chiffrement matériel local de la base de données SQLite via SQLCipher.
+- Conteneurisation Docker du backend pour déploiement sur serveur souverain.
+- Création d'un portail praticien pour le suivi clinique en temps réel.

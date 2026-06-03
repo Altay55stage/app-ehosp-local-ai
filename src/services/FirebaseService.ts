@@ -166,6 +166,16 @@ async function localSet(refObj: any, data: any) {
     await ReactNativeAsyncStorage.setItem('ehosp_questionnaire', JSON.stringify(data));
     return;
   }
+
+  // Route consent onboarding
+  if (path.includes('/onboarding/consent')) {
+    const parts = path.split('/');
+    const uid = parts.find((p, i) => parts[i - 1] === 'users');
+    if (uid) {
+      await ReactNativeAsyncStorage.setItem(`@consent_${uid}`, 'true');
+    }
+    return;
+  }
 }
 
 async function localGet(refObj: any) {
@@ -231,6 +241,21 @@ async function localGet(refObj: any) {
     return {
       exists: () => parsed !== null,
       val: () => parsed
+    };
+  }
+
+  // Format path: users/${uid}/onboarding/consent
+  if (path.includes('/onboarding/consent')) {
+    const parts = path.split('/');
+    const uid = parts.find((p, i) => parts[i - 1] === 'users');
+    let accepted = false;
+    if (uid) {
+      const val = await ReactNativeAsyncStorage.getItem(`@consent_${uid}`);
+      if (val === 'true') accepted = true;
+    }
+    return {
+      exists: () => accepted,
+      val: () => ({ accepted })
     };
   }
 

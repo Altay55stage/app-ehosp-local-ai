@@ -14,6 +14,33 @@ import { Ionicons } from '@expo/vector-icons';
 
 WebBrowser.maybeCompleteAuthSession();
 
+const evaluatePasswordStrength = (pass: string) => {
+  if (!pass) return { score: 0, label: 'Vide', color: '#64748B', rules: { length: false, number: false, special: false } };
+  
+  const rules = {
+    length: pass.length >= 6,
+    number: /\d/.test(pass),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(pass)
+  };
+  
+  let score = 0;
+  if (rules.length) score += 1;
+  if (rules.number) score += 1;
+  if (rules.special) score += 1;
+  
+  let label = 'Faible';
+  let color = '#EF4444';
+  if (score === 2) {
+    label = 'Moyen';
+    color = '#F59E0B';
+  } else if (score === 3) {
+    label = 'Fort';
+    color = '#10B981';
+  }
+  
+  return { score, label, color, rules };
+};
+
 export default function RegisterScreen({ navigation }: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -75,8 +102,9 @@ export default function RegisterScreen({ navigation }: any) {
       showToast('Les mots de passe ne correspondent pas.', 'warning');
       return;
     }
-    if (password.length < 6) {
-      showToast('Le mot de passe doit contenir au moins 6 caractères.', 'warning');
+    const strength = evaluatePasswordStrength(password);
+    if (strength.score < 3) {
+      showToast('Votre mot de passe doit respecter toutes les règles de sécurité.', 'warning');
       return;
     }
 
@@ -151,6 +179,38 @@ export default function RegisterScreen({ navigation }: any) {
               onChangeText={setPassword}
               leftIcon="lock-closed-outline"
             />
+
+            {password.length > 0 && (() => {
+              const { score, label, color, rules } = evaluatePasswordStrength(password);
+              return (
+                <View style={{ marginBottom: 16 }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                    <Text style={[Typography.caption, { color: Colors.textSecondary }]}>Sécurité du mot de passe</Text>
+                    <Text style={[Typography.caption, { color, fontWeight: '700' }]}>{label}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', gap: 4, height: 4, marginBottom: 12 }}>
+                    <View style={{ flex: 1, backgroundColor: score >= 1 ? color : 'rgba(255,255,255,0.1)', borderRadius: 2 }} />
+                    <View style={{ flex: 1, backgroundColor: score >= 2 ? color : 'rgba(255,255,255,0.1)', borderRadius: 2 }} />
+                    <View style={{ flex: 1, backgroundColor: score >= 3 ? color : 'rgba(255,255,255,0.1)', borderRadius: 2 }} />
+                  </View>
+                  <View style={{ gap: 4, paddingLeft: 2 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Ionicons name={rules.length ? "checkmark-circle" : "ellipse-outline"} size={14} color={rules.length ? Colors.primary : Colors.textMuted} />
+                      <Text style={[Typography.caption, { color: rules.length ? '#FFFFFF' : Colors.textMuted, marginLeft: 6 }]}>Au moins 6 caractères</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Ionicons name={rules.number ? "checkmark-circle" : "ellipse-outline"} size={14} color={rules.number ? Colors.primary : Colors.textMuted} />
+                      <Text style={[Typography.caption, { color: rules.number ? '#FFFFFF' : Colors.textMuted, marginLeft: 6 }]}>Au moins 1 chiffre</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <Ionicons name={rules.special ? "checkmark-circle" : "ellipse-outline"} size={14} color={rules.special ? Colors.primary : Colors.textMuted} />
+                      <Text style={[Typography.caption, { color: rules.special ? '#FFFFFF' : Colors.textMuted, marginLeft: 6 }]}>Au moins 1 caractère spécial (!@#...)</Text>
+                    </View>
+                  </View>
+                </View>
+              );
+            })()}
+
             <Input 
               label="Confirmer le mot de passe" 
               placeholder="••••••••" 

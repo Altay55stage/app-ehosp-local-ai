@@ -90,9 +90,9 @@ export default function ConsentScreen({ navigation }: any) {
           J'ai lu et j'accepte les Conditions Générales (CGU).
         </CheckBox>
 
-        <TouchableOpacity onPress={() => Linking.openURL('https://firebasestorage.googleapis.com/v0/b/ehosp-prod-a2b84.appspot.com/o/cgu-ehosp.pdf?alt=media')} style={{ marginBottom: 32 }}>
+        <TouchableOpacity onPress={() => { setHasOpenedPdf(true); navigation.navigate('CGU'); }} style={{ marginBottom: 32 }} accessibilityRole="button" accessibilityLabel="Lire les CGU complètes">
           <Text style={[Typography.bodyMedium, { color: Colors.primary, textDecorationLine: 'underline' }]}>
-            Lire les CGU complètes (PDF)
+            Lire les CGU complètes (PDF local)
           </Text>
         </TouchableOpacity>
 
