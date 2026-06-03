@@ -74,58 +74,59 @@ export default function BookConsultationScreen({ navigation, route }: any) {
   };
 
   if (step === 'choose') return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <ScrollView style={{ flex: 1, paddingHorizontal: 24 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 16, marginBottom: 32 }}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 16 }} accessibilityRole="button" accessibilityLabel="Retour">
-            <Ionicons name="arrow-back" size={28} color="#FFFFFF" />
+            <Ionicons name="arrow-back" size={28} color={Colors.textPrimary} />
           </TouchableOpacity>
           <View>
-            <Text style={[Typography.h2, { color: '#FFFFFF' }]}>Consulter un Médecin</Text>
-            <Text style={[Typography.caption, { color: '#94A3B8' }]}>Réponse garantie en 15 minutes</Text>
+            <Text style={[Typography.h2, { color: Colors.textPrimary }]}>Consulter un Médecin</Text>
+            <Text style={[Typography.caption, { color: Colors.textSecondary }]}>Réponse garantie en 15 minutes</Text>
           </View>
         </View>
 
-        <View style={{ backgroundColor: Colors.primary + '15', borderWidth: 1, borderColor: Colors.primary + '40', borderRadius: 24, padding: 20, marginBottom: 24, flexDirection: 'row', alignItems: 'center' }}>
-          <View style={{ backgroundColor: Colors.primary + '25', width: 48, height: 48, borderRadius: 999, alignItems: 'center', justifyContent: 'center', marginRight: 16 }}>
+        <View style={{ backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primary + '40', borderRadius: 24, padding: 20, marginBottom: 24, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ backgroundColor: Colors.primaryLight, width: 48, height: 48, borderRadius: 999, alignItems: 'center', justifyContent: 'center', marginRight: 16 }}>
             <Ionicons name="card" size={24} color={Colors.primary} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 24, fontWeight: '900', color: '#FFFFFF' }}>€14,99</Text>
-            <Text style={[Typography.caption, { color: '#94A3B8' }]}>Consultation + Ordonnance incluse</Text>
+            <Text style={{ fontSize: 24, fontWeight: '900', color: Colors.textPrimary }}>€14,99</Text>
+            <Text style={[Typography.caption, { color: Colors.textSecondary }]}>Consultation + Ordonnance incluse</Text>
           </View>
-          <View style={{ backgroundColor: Colors.success + '25', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 999 }}>
-            <Text style={[Typography.caption, { color: Colors.success }]}>IA Gratuite ✓</Text>
+          <View style={{ backgroundColor: Colors.success + '20', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 999 }}>
+            <Text style={[Typography.caption, { color: Colors.success, fontWeight: '700' }]}>IA Gratuite ✓</Text>
           </View>
         </View>
 
         {urgencyScore >= 7 && (
           <View style={{ backgroundColor: Colors.error + '15', borderWidth: 1, borderColor: Colors.error + '40', borderRadius: 16, padding: 16, marginBottom: 24, flexDirection: 'row', alignItems: 'center' }}>
             <Ionicons name="warning" size={20} color={Colors.error} />
-            <Text style={[Typography.bodyMedium, { color: '#FCA5A5', marginLeft: 8 }]}>Urgence élevée ({urgencyScore}/10) — Priorité max</Text>
+            <Text style={[Typography.bodyMedium, { color: Colors.error, marginLeft: 8, fontWeight: '700' }]}>Urgence élevée ({urgencyScore}/10) — Priorité max</Text>
           </View>
         )}
 
-        <Text style={[Typography.bodyMedium, { color: '#FFFFFF', marginBottom: 16 }]}>Choisir la spécialité</Text>
+        <Text style={[Typography.bodyMedium, { color: Colors.textPrimary, marginBottom: 16 }]}>Choisir la spécialité</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 32 }}>
           {SPECIALTIES.map((spec) => (
             <TouchableOpacity key={spec.id} onPress={() => setSelectedSpecialty(spec.id)}
               style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12, borderRadius: 16, borderWidth: 1.5,
-                borderColor: selectedSpecialty === spec.id ? Colors.primary : 'rgba(255,255,255,0.1)',
-                backgroundColor: selectedSpecialty === spec.id ? Colors.primary + '20' : 'rgba(255,255,255,0.05)' }}
+                borderColor: selectedSpecialty === spec.id ? Colors.primary : Colors.border,
+                backgroundColor: selectedSpecialty === spec.id ? Colors.primaryLight : Colors.surface,
+                ...Shadows.sm }}
               accessibilityRole="radio" accessibilityState={{ selected: selectedSpecialty === spec.id }}>
               <Text style={{ fontSize: 18, marginRight: 8 }}>{spec.icon}</Text>
-              <Text style={[Typography.bodyMedium, { color: selectedSpecialty === spec.id ? Colors.primary : '#CBD5E1' }]}>{spec.label}</Text>
+              <Text style={[Typography.bodyMedium, { color: selectedSpecialty === spec.id ? Colors.primary : Colors.textSecondary }]}>{spec.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
 
-        <View style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 24, padding: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', marginBottom: 32 }}>
-          <Text style={[Typography.bodyMedium, { color: '#FFFFFF', marginBottom: 12 }]}>Ce qui est inclus :</Text>
+        <View style={{ backgroundColor: Colors.surface, borderRadius: 24, padding: 20, borderWidth: 1, borderColor: Colors.border, marginBottom: 32, ...Shadows.sm }}>
+          <Text style={[Typography.bodyMedium, { color: Colors.textPrimary, marginBottom: 12 }]}>Ce qui est inclus :</Text>
           {['Consultation vidéo avec un médecin vérifié', 'Ordonnance numérique signée (PDF)', 'Partage sécurisé du dossier médical', 'Support 15 min après consultation'].map((item, i) => (
             <View key={i} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
               <Ionicons name="checkmark-circle" size={16} color={Colors.primary} />
-              <Text style={[Typography.caption, { color: '#CBD5E1', marginLeft: 8, flex: 1 }]}>{item}</Text>
+              <Text style={[Typography.caption, { color: Colors.textSecondary, marginLeft: 8, flex: 1 }]}>{item}</Text>
             </View>
           ))}
         </View>
@@ -137,42 +138,42 @@ export default function BookConsultationScreen({ navigation, route }: any) {
   );
 
   if (step === 'waiting') return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
         <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-          <View style={{ width: 160, height: 160, backgroundColor: Colors.primary + '15', borderRadius: 999, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: Colors.primary + '40', marginBottom: 32 }}>
+          <View style={{ width: 160, height: 160, backgroundColor: Colors.primaryLight, borderRadius: 999, alignItems: 'center', justifyContent: 'center', borderWidth: 4, borderColor: Colors.primary + '20', marginBottom: 32 }}>
             <Text style={{ fontSize: 64 }}>👨‍⚕️</Text>
           </View>
         </Animated.View>
-        <Text style={[Typography.h1, { color: '#FFFFFF', textAlign: 'center', marginBottom: 8 }]}>Recherche en cours...</Text>
-        <Text style={[Typography.body, { color: '#94A3B8', textAlign: 'center', marginBottom: 32 }]}>
+        <Text style={[Typography.h1, { color: Colors.textPrimary, textAlign: 'center', marginBottom: 8 }]}>Recherche en cours...</Text>
+        <Text style={[Typography.body, { color: Colors.textSecondary, textAlign: 'center', marginBottom: 32 }]}>
           Un médecin {selectedSpecialty} va accepter
         </Text>
-        <View style={{ backgroundColor: Colors.primary + '15', borderWidth: 1, borderColor: Colors.primary + '40', borderRadius: 24, paddingHorizontal: 32, paddingVertical: 20, marginBottom: 32, alignItems: 'center' }}>
-          <Text style={[Typography.caption, { color: Colors.primary, textTransform: 'uppercase', marginBottom: 4 }]}>Temps restant</Text>
-          <Text style={{ fontSize: 48, fontWeight: '900', color: '#FFFFFF' }}>{formatTime(timeLeft)}</Text>
+        <View style={{ backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primary + '40', borderRadius: 24, paddingHorizontal: 32, paddingVertical: 20, marginBottom: 32, alignItems: 'center' }}>
+          <Text style={[Typography.caption, { color: Colors.primary, textTransform: 'uppercase', marginBottom: 4, fontWeight: '700' }]}>Temps restant</Text>
+          <Text style={{ fontSize: 48, fontWeight: '900', color: Colors.textPrimary }}>{formatTime(timeLeft)}</Text>
         </View>
-        <View style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 16, padding: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', marginBottom: 32 }}>
-          <Text style={[Typography.caption, { color: '#94A3B8', textAlign: 'center' }]}>
+        <View style={{ backgroundColor: Colors.surface, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: Colors.border, marginBottom: 32, ...Shadows.sm }}>
+          <Text style={[Typography.caption, { color: Colors.textSecondary, textAlign: 'center' }]}>
             Si aucun médecin ne répond dans 15 min, remboursement automatique.
           </Text>
         </View>
-        <TouchableOpacity onPress={handleCancel} style={{ borderWidth: 1, borderColor: Colors.error + '40', borderRadius: 16, paddingHorizontal: 24, paddingVertical: 12 }}
+        <TouchableOpacity onPress={handleCancel} style={{ borderWidth: 1, borderColor: Colors.error, borderRadius: 16, paddingHorizontal: 24, paddingVertical: 12, backgroundColor: Colors.surface, ...Shadows.sm }}
           accessibilityRole="button" accessibilityLabel="Annuler la consultation">
-          <Text style={[Typography.bodyMedium, { color: '#FCA5A5' }]}>Annuler la consultation</Text>
+          <Text style={[Typography.bodyMedium, { color: Colors.error, fontWeight: '700' }]}>Annuler la consultation</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 
   if (step === 'error') return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 }}>
         <View style={{ width: 96, height: 96, borderRadius: 999, backgroundColor: Colors.error + '15', alignItems: 'center', justifyContent: 'center', marginBottom: 24, borderWidth: 2, borderColor: Colors.error + '40' }}>
           <Ionicons name="time-outline" size={48} color={Colors.error} />
         </View>
-        <Text style={[Typography.h2, { color: '#FFFFFF', textAlign: 'center', marginBottom: 12 }]}>Aucun médecin disponible</Text>
-        <Text style={[Typography.body, { color: '#94A3B8', textAlign: 'center', marginBottom: 32 }]}>
+        <Text style={[Typography.h2, { color: Colors.textPrimary, textAlign: 'center', marginBottom: 12 }]}>Aucun médecin disponible</Text>
+        <Text style={[Typography.body, { color: Colors.textSecondary, textAlign: 'center', marginBottom: 32 }]}>
           Tous nos médecins sont occupés. Remboursement sous 3-5 jours.
         </Text>
         <GradientButton title="Retour" onPress={() => navigation.goBack()} />

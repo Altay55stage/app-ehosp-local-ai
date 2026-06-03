@@ -189,22 +189,22 @@ export default function RegisterScreen({ navigation }: any) {
                     <Text style={[Typography.caption, { color, fontWeight: '700' }]}>{label}</Text>
                   </View>
                   <View style={{ flexDirection: 'row', gap: 4, height: 4, marginBottom: 12 }}>
-                    <View style={{ flex: 1, backgroundColor: score >= 1 ? color : 'rgba(255,255,255,0.1)', borderRadius: 2 }} />
-                    <View style={{ flex: 1, backgroundColor: score >= 2 ? color : 'rgba(255,255,255,0.1)', borderRadius: 2 }} />
-                    <View style={{ flex: 1, backgroundColor: score >= 3 ? color : 'rgba(255,255,255,0.1)', borderRadius: 2 }} />
+                    <View style={{ flex: 1, backgroundColor: score >= 1 ? color : Colors.border, borderRadius: 2 }} />
+                    <View style={{ flex: 1, backgroundColor: score >= 2 ? color : Colors.border, borderRadius: 2 }} />
+                    <View style={{ flex: 1, backgroundColor: score >= 3 ? color : Colors.border, borderRadius: 2 }} />
                   </View>
                   <View style={{ gap: 4, paddingLeft: 2 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <Ionicons name={rules.length ? "checkmark-circle" : "ellipse-outline"} size={14} color={rules.length ? Colors.primary : Colors.textMuted} />
-                      <Text style={[Typography.caption, { color: rules.length ? '#FFFFFF' : Colors.textMuted, marginLeft: 6 }]}>Au moins 6 caractères</Text>
+                      <Ionicons name={rules.length ? "checkmark-circle" : "ellipse-outline"} size={14} color={rules.length ? Colors.success : Colors.textMuted} />
+                      <Text style={[Typography.caption, { color: rules.length ? Colors.textPrimary : Colors.textMuted, marginLeft: 6 }]}>Au moins 6 caractères</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <Ionicons name={rules.number ? "checkmark-circle" : "ellipse-outline"} size={14} color={rules.number ? Colors.primary : Colors.textMuted} />
-                      <Text style={[Typography.caption, { color: rules.number ? '#FFFFFF' : Colors.textMuted, marginLeft: 6 }]}>Au moins 1 chiffre</Text>
+                      <Ionicons name={rules.number ? "checkmark-circle" : "ellipse-outline"} size={14} color={rules.number ? Colors.success : Colors.textMuted} />
+                      <Text style={[Typography.caption, { color: rules.number ? Colors.textPrimary : Colors.textMuted, marginLeft: 6 }]}>Au moins 1 chiffre</Text>
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <Ionicons name={rules.special ? "checkmark-circle" : "ellipse-outline"} size={14} color={rules.special ? Colors.primary : Colors.textMuted} />
-                      <Text style={[Typography.caption, { color: rules.special ? '#FFFFFF' : Colors.textMuted, marginLeft: 6 }]}>Au moins 1 caractère spécial (!@#...)</Text>
+                      <Ionicons name={rules.special ? "checkmark-circle" : "ellipse-outline"} size={14} color={rules.special ? Colors.success : Colors.textMuted} />
+                      <Text style={[Typography.caption, { color: rules.special ? Colors.textPrimary : Colors.textMuted, marginLeft: 6 }]}>Au moins 1 caractère spécial (!@#...)</Text>
                     </View>
                   </View>
                 </View>

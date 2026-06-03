@@ -82,7 +82,6 @@ export default function HealthQuestionnaireScreen({ navigation }: any) {
 
     setTimeout(() => {
       dispatch(setHasCompletedQuestionnaire(true));
-      navigation.replace('RoleSelection');
     }, 800);
   };
 

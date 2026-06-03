@@ -30,7 +30,6 @@ export default function RootNavigator() {
   const dispatch = useDispatch();
   const { isAuthenticated, isBiometricVerified, activeProfileId, hasAcceptedConsent, hasCompletedQuestionnaire, user } = useSelector((state: RootState) => state.auth);
   const [isInitializing, setIsInitializing] = useState(true);
-  const [initialRoute, setInitialRoute] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -87,39 +86,39 @@ export default function RootNavigator() {
     return () => { cancelled = true; subscriber(); clearTimeout(failsafe); };
   }, [dispatch]);
 
-  // Détermine la route initiale APRÈS l'initialisation
-  useEffect(() => {
-    if (isInitializing) return;
-    if (!isAuthenticated) setInitialRoute('Auth');
-    else if (!hasAcceptedConsent) setInitialRoute('Consent');
-    else if (!isBiometricVerified) setInitialRoute('Biometric');
-    else if (!activeProfileId) setInitialRoute('ProfileSelection');
-    else if (!hasCompletedQuestionnaire) setInitialRoute('HealthQuestionnaire');
-    else if (!user?.role) setInitialRoute('RoleSelection');
-    else if (user.role === 'doctor' && user.status !== 'approved') setInitialRoute('DoctorCandidacy');
-    else setInitialRoute('Main');
-  }, [isInitializing, isAuthenticated, hasAcceptedConsent, isBiometricVerified, activeProfileId, hasCompletedQuestionnaire, user?.role, user?.status]);
-
-  if (isInitializing || !initialRoute) {
+  if (isInitializing) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background }}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
+      <NavigationContainer>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.background }}>
+          <ActivityIndicator size="large" color={Colors.primary} />
+        </View>
+      </NavigationContainer>
     );
   }
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={initialRoute}>
-        <Stack.Screen name="Auth" component={AuthNavigator} />
-        <Stack.Screen name="Consent" component={ConsentScreen} />
-        <Stack.Screen name="CGU" component={CGUScreen} />
-        <Stack.Screen name="Biometric" component={FaceIDScreen} />
-        <Stack.Screen name="ProfileSelection" component={ProfileSelectionScreen} />
-        <Stack.Screen name="HealthQuestionnaire" component={HealthQuestionnaireScreen} />
-        <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
-        <Stack.Screen name="DoctorCandidacy" component={DoctorCandidacyScreen} />
-        <Stack.Screen name="Main" component={MainTabNavigator} />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {!isAuthenticated ? (
+          <Stack.Screen name="Auth" component={AuthNavigator} />
+        ) : !hasAcceptedConsent ? (
+          <>
+            <Stack.Screen name="Consent" component={ConsentScreen} />
+            <Stack.Screen name="CGU" component={CGUScreen} />
+          </>
+        ) : !isBiometricVerified ? (
+          <Stack.Screen name="Biometric" component={FaceIDScreen} />
+        ) : !activeProfileId ? (
+          <Stack.Screen name="ProfileSelection" component={ProfileSelectionScreen} />
+        ) : !hasCompletedQuestionnaire ? (
+          <Stack.Screen name="HealthQuestionnaire" component={HealthQuestionnaireScreen} />
+        ) : !user?.role ? (
+          <Stack.Screen name="RoleSelection" component={RoleSelectionScreen} />
+        ) : (user.role === 'doctor' && user.status !== 'approved') ? (
+          <Stack.Screen name="DoctorCandidacy" component={DoctorCandidacyScreen} />
+        ) : (
+          <Stack.Screen name="Main" component={MainTabNavigator} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

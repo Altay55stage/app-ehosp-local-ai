@@ -645,52 +645,84 @@ export default function ChatScreen({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#020617' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <KeyboardAvoidingView 
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
       >
-        <View className="p-4 border-b border-white/5 flex-row justify-between items-center bg-transparent">
-          <TouchableOpacity onPress={() => setIsHistoryModalVisible(true)} className="bg-white/5 border border-white/10 px-3 py-2 rounded-xl flex-row items-center">
-            <Text className="text-white text-xs mr-2">☰ Historique</Text>
+        {/* Header */}
+        <View style={{ paddingHorizontal: 16, paddingVertical: 12, borderBottomWidth: 1, borderColor: Colors.border, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: Colors.surface }}>
+          <TouchableOpacity onPress={() => setIsHistoryModalVisible(true)} style={{ backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ color: Colors.textPrimary, fontSize: 12, fontWeight: '600' }}>☰ Historique</Text>
           </TouchableOpacity>
-          <Text className="text-xl text-white font-black tracking-tight ml-4">Dr. IA</Text>
-          <View className="flex-1 items-end">
-            <Text className="text-primary text-xs font-bold">{profile.name ? `${profile.name}` : ''}</Text>
+          <Text style={[Typography.h2, { color: Colors.textPrimary, fontWeight: '700' }]}>Dr. IA</Text>
+          <View style={{ flex: 1, alignItems: 'end' }}>
+            {activeAgentOverride ? (
+              <TouchableOpacity onPress={resetToGeneralist} style={{ backgroundColor: Colors.primaryLight, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999 }}>
+                <Text style={{ color: Colors.primary, fontSize: 11, fontWeight: '700' }}>← Généraliste</Text>
+              </TouchableOpacity>
+            ) : (
+              <Text style={{ color: Colors.primary, fontSize: 12, fontWeight: '700' }}>{profile.name ? `${profile.name}` : ''}</Text>
+            )}
           </View>
         </View>
 
-        <View className="border-b border-white/5 bg-transparent">
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} className="py-3 px-2">
-            {specialists.map((spec, i) => {
-              const isActive = activeAgentOverride === spec || (!activeAgentOverride && spec.includes("Généraliste"));
-              return (
-                <TouchableOpacity 
-                  key={i} 
-                  onPress={() => setActiveAgentOverride(spec)}
-                  className={`border px-4 py-1.5 rounded-full mr-2 ${isActive ? 'bg-primary/20 border-primary' : 'bg-white/5 border-white/10'}`}
-                >
-                  <Text className={`text-xs ${isActive ? 'text-primary font-black' : 'text-slate-400 font-medium'}`}>{spec}</Text>
-                </TouchableOpacity>
-              );
-            })}
+        {/* Specialists Scrollbar */}
+        <View style={{ borderBottomWidth: 1, borderColor: Colors.border, backgroundColor: Colors.surface }}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ paddingVertical: 10 }}>
+            <View style={{ flexDirection: 'row', paddingHorizontal: 16 }}>
+              {specialists.map((spec, i) => {
+                const isActive = activeAgentOverride === spec || (!activeAgentOverride && spec.includes("Généraliste"));
+                return (
+                  <TouchableOpacity 
+                    key={i} 
+                    onPress={() => setActiveAgentOverride(spec)}
+                    style={{
+                      borderWidth: 1,
+                      borderColor: isActive ? Colors.primary : Colors.border,
+                      backgroundColor: isActive ? Colors.primaryLight : Colors.background,
+                      paddingHorizontal: 16,
+                      paddingVertical: 8,
+                      borderRadius: 99,
+                      marginRight: 8,
+                    }}
+                  >
+                    <Text style={{
+                      fontSize: 12,
+                      color: isActive ? Colors.primary : Colors.textSecondary,
+                      fontWeight: isActive ? '700' : '500',
+                    }}>{spec}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           </ScrollView>
         </View>
 
-        {/* Bandeau profil incomplet */}
+        {/* Incomplete profile warning */}
         {isProfileIncomplete && (
           <TouchableOpacity 
             onPress={() => navigation.navigate('Profile')}
-            className="mx-4 mb-2 bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex-row items-center"
+            style={{
+              marginHorizontal: 16,
+              marginTop: 12,
+              backgroundColor: Colors.warning + '10',
+              borderWidth: 1,
+              borderColor: Colors.warning + '30',
+              borderRadius: 16,
+              padding: 12,
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
           >
-            <Ionicons name="alert-circle" size={20} color="#F59E0B" />
-            <Text className="text-amber-500 text-xs ml-2 flex-1 font-medium">
+            <Ionicons name="alert-circle" size={20} color={Colors.warning} />
+            <Text style={{ color: Colors.warning, fontSize: 12, marginLeft: 8, flex: 1, fontWeight: '500' }}>
               Profil incomplet. Cliquez ici pour finaliser votre dossier (âge, poids...) pour un meilleur diagnostic.
             </Text>
           </TouchableOpacity>
         )}
 
-        {/* Bandeau urgence critique */}
+        {/* Urgency critical banner */}
         {currentUrgencyScore >= 8 && (
           <TouchableOpacity
             onPress={() => {
@@ -698,14 +730,26 @@ export default function ChatScreen({ navigation }: any) {
               const nums: Record<string, string> = { 'France': '15', 'Belgique': '112', 'Suisse': '144', 'Canada': '911' };
               Linking.openURL(`tel:${nums[country] || '112'}`);
             }}
-            className="mx-4 mb-2 bg-red-600 rounded-xl p-3 flex-row items-center justify-center border border-red-400"
+            style={{
+              marginHorizontal: 16,
+              marginTop: 12,
+              backgroundColor: Colors.error,
+              borderRadius: 16,
+              padding: 16,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderWidth: 1,
+              borderColor: Colors.error,
+              ...Shadows.primary,
+            }}
           >
-            <Text className="text-white font-black text-base">📞 Appeler le 15 — Urgence Détectée</Text>
+            <Text style={{ color: '#FFFFFF', fontWeight: '800', fontSize: 16 }}>📞 Appeler le 15 — Urgence Détectée</Text>
           </TouchableOpacity>
         )}
 
         <FlatList
-          className="flex-1 px-4"
+          style={{ flex: 1, paddingHorizontal: 16 }}
           data={messages}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <MessageBubble message={item} />}
@@ -714,45 +758,52 @@ export default function ChatScreen({ navigation }: any) {
         />
 
         {isProfileIncomplete ? (
-          <View className="p-4 bg-urgent/20 border border-urgent m-4 rounded-xl">
-            <Text className="text-white text-center font-bold mb-2">⚠️ Profil Médical Incomplet</Text>
-            <Text className="text-slate-300 text-center text-sm">
+          <View style={{ padding: 20, backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, margin: 16, borderRadius: 24, ...Shadows.sm }}>
+            <Text style={[Typography.h3, { textAlign: 'center', marginBottom: 8, color: Colors.textPrimary }]}>⚠️ Profil Médical Incomplet</Text>
+            <Text style={[Typography.body, { color: Colors.textSecondary, textAlign: 'center', fontSize: 14 }]}>
               Pour votre sécurité, le Dr. IA a besoin de connaître votre sexe, date de naissance et pays de résidence pour établir un diagnostic précis.
             </Text>
             <TouchableOpacity 
               onPress={() => navigation.navigate('Profile')}
-              className="mt-4 bg-primary p-3 rounded-xl items-center"
+              style={{
+                marginTop: 20,
+                backgroundColor: Colors.primary,
+                padding: 16,
+                borderRadius: 16,
+                alignItems: 'center',
+                ...Shadows.primary,
+              }}
             >
-              <Text className="text-white font-bold">Compléter mon profil</Text>
+              <Text style={{ color: '#FFFFFF', fontWeight: '700', fontSize: 16 }}>Compléter mon profil</Text>
             </TouchableOpacity>
           </View>
         ) : (
-          <View className="p-4 flex-row items-center border-t border-white/5 bg-transparent pb-6">
+          <View style={{ padding: 12, flexDirection: 'row', alignItems: 'center', borderTopWidth: 1, borderColor: Colors.border, backgroundColor: Colors.surface, paddingBottom: Platform.OS === 'ios' ? 24 : 12 }}>
             <TouchableOpacity 
               onPress={openDocumentMenu}
-              className="w-10 h-10 bg-white/5 border border-white/10 rounded-full items-center justify-center mr-2 shadow-sm"
+              style={{ width: 42, height: 42, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, borderRadius: 21, items: 'center', justifyContent: 'center', marginRight: 8, alignItems: 'center' }}
             >
-              <Ionicons name="document-attach" size={18} color="#0EA5E9" />
+              <Ionicons name="document-attach" size={18} color={Colors.primary} />
             </TouchableOpacity>
 
             <TouchableOpacity 
               onPress={pickImage}
-              className="w-10 h-10 bg-white/5 border border-white/10 rounded-full items-center justify-center mr-2 shadow-sm"
+              style={{ width: 42, height: 42, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, borderRadius: 21, items: 'center', justifyContent: 'center', marginRight: 8, alignItems: 'center' }}
             >
-              <Ionicons name="camera" size={18} color="#0EA5E9" />
+              <Ionicons name="camera" size={18} color={Colors.primary} />
             </TouchableOpacity>
 
             <TouchableOpacity 
               onPress={() => navigation.navigate('VoiceConsultation')}
-              className="w-10 h-10 rounded-full items-center justify-center mr-3 bg-primary/20 border border-primary/30 shadow-sm"
+              style={{ width: 42, height: 42, backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primary + '20', borderRadius: 21, items: 'center', justifyContent: 'center', marginRight: 12, alignItems: 'center' }}
             >
-              <Ionicons name="mic" size={20} color="#0EA5E9" />
+              <Ionicons name="mic" size={20} color={Colors.primary} />
             </TouchableOpacity>
 
             <TextInput
-              className="flex-1 bg-white/5 border border-white/10 text-white rounded-2xl px-4 py-3 mr-3 shadow-sm"
+              style={{ flex: 1, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, color: Colors.textPrimary, borderRadius: 20, paddingHorizontal: 16, paddingVertical: 10, marginRight: 12, maxHeight: 100, fontSize: 15 }}
               placeholder={isRecording ? "Enregistrement..." : "Saisissez un message..."}
-              placeholderTextColor="#64748B"
+              placeholderTextColor={Colors.textMuted}
               value={inputText}
               onChangeText={setInputText}
               multiline
@@ -761,10 +812,10 @@ export default function ChatScreen({ navigation }: any) {
             <TouchableOpacity 
               onPress={sendMessage}
               disabled={loading || isRecording}
-              className="w-12 h-12 bg-primary rounded-full items-center justify-center shadow-lg shadow-primary/30"
+              style={{ width: 44, height: 44, backgroundColor: Colors.primary, borderRadius: 22, alignItems: 'center', justifyContent: 'center', ...Shadows.primary }}
             >
               {loading ? (
-                <Text className="text-white font-bold text-xs">...</Text>
+                <Text style={{ color: '#FFFFFF', fontWeight: '700', fontSize: 12 }}>...</Text>
               ) : (
                 <Ionicons name="send" size={18} color="white" />
               )}
@@ -772,53 +823,81 @@ export default function ChatScreen({ navigation }: any) {
           </View>
         )}
 
+        {/* History Modal Sidebar */}
         <Modal
           visible={isHistoryModalVisible}
           transparent={true}
           animationType="slide"
           onRequestClose={() => setIsHistoryModalVisible(false)}
         >
-          <View className="flex-1 bg-black/80 flex-row">
-            <View className="flex-1" />
-            <View className="w-4/5 bg-dark h-full border-l border-white/10 pt-12 px-4 shadow-2xl">
-              <View className="flex-row justify-between items-center mb-6">
-                <Text className="text-xl text-white font-bold">Consultations</Text>
-                <TouchableOpacity onPress={() => setIsHistoryModalVisible(false)}>
-                  <Text className="text-slate-400 font-bold text-lg">X</Text>
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', flexDirection: 'row' }}>
+            <View style={{ flex: 1 }} />
+            <View style={{ width: '80%', backgroundColor: Colors.background, height: '100%', borderLeftWidth: 1, borderColor: Colors.border, paddingTop: 50, paddingHorizontal: 16, ...Shadows.lg }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+                <Text style={[Typography.h2, { color: Colors.textPrimary }]}>Consultations</Text>
+                <TouchableOpacity onPress={() => setIsHistoryModalVisible(false)} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, alignItems: 'center', justifyContent: 'center' }}>
+                  <Ionicons name="close" size={20} color={Colors.textPrimary} />
                 </TouchableOpacity>
               </View>
 
               <TouchableOpacity 
                 onPress={startNewSession}
-                className="bg-primary/20 border border-primary p-4 rounded-xl mb-6 items-center"
+                style={{
+                  backgroundColor: Colors.primaryLight,
+                  borderWidth: 1.5,
+                  borderColor: Colors.primary,
+                  padding: 16,
+                  borderRadius: 16,
+                  marginBottom: 20,
+                  alignItems: 'center',
+                  ...Shadows.sm,
+                }}
               >
-                <Text className="text-primary font-bold">+ Nouvelle Consultation</Text>
+                <Text style={{ color: Colors.primary, fontWeight: '700' }}>+ Nouvelle Consultation</Text>
               </TouchableOpacity>
 
               <FlatList
                 data={Array.from(new Map(sessions.map(s => [s.id, s])).values())}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) => (
-                  <View className="flex-row items-center mb-2">
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
                     <TouchableOpacity 
-                      className={`flex-1 p-4 rounded-xl border ${item.id === activeSessionId ? 'border-secondary bg-secondary/10' : 'border-white/5 bg-white/5'}`}
+                      style={{
+                        flex: 1,
+                        padding: 16,
+                        borderRadius: 16,
+                        borderWidth: 1,
+                        borderColor: item.id === activeSessionId ? Colors.primary : Colors.border,
+                        backgroundColor: item.id === activeSessionId ? Colors.primaryLight : Colors.surface,
+                        ...Shadows.sm,
+                      }}
                       onPress={() => {
                         dispatch(setActiveSessionId(item.id));
                         setIsHistoryModalVisible(false);
                       }}
                     >
-                      <Text className="text-white font-semibold" numberOfLines={1}>{item.title}</Text>
-                      <Text className="text-slate-500 text-xs mt-1">{new Date(item.timestamp).toLocaleDateString()}</Text>
+                      <Text style={{ color: item.id === activeSessionId ? Colors.primary : Colors.textPrimary, fontWeight: '600' }} numberOfLines={1}>{item.title}</Text>
+                      <Text style={{ color: Colors.textMuted, fontSize: 11, marginTop: 4 }}>{new Date(item.timestamp).toLocaleDateString()}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity 
                       onPress={() => deleteConsultation(item.id)}
-                      className="ml-2 w-12 h-12 bg-red-500/10 border border-red-500/20 rounded-xl items-center justify-center"
+                      style={{
+                        marginLeft: 12,
+                        width: 48,
+                        height: 48,
+                        backgroundColor: Colors.error + '10',
+                        borderWidth: 1,
+                        borderColor: Colors.error + '20',
+                        borderRadius: 16,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
                     >
-                      <Ionicons name="trash-outline" size={20} color="#EF4444" />
+                      <Ionicons name="trash-outline" size={20} color={Colors.error} />
                     </TouchableOpacity>
                   </View>
                 )}
-                ListEmptyComponent={<Text className="text-slate-500 text-center mt-10">Aucun historique.</Text>}
+                ListEmptyComponent={<Text style={{ color: Colors.textMuted, textAlign: 'center', marginTop: 40 }}>Aucun historique.</Text>}
               />
             </View>
           </View>

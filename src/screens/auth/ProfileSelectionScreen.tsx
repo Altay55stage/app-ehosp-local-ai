@@ -52,20 +52,19 @@ export default function ProfileSelectionScreen({ navigation }: any) {
       const questSnap = await get(child(dbRef, `users/${user!.uid}/profiles/${profile.id}/questionnaire`));
       dispatch(setHasCompletedQuestionnaire(!!questSnap.val()?.completedAt));
     } catch (e) { console.error("Erreur vérification questionnaire", e); }
-
-    if (profile.pin) {
-      Alert.prompt("Code PIN", "Entrez le code PIN de ce profil", [
-        { text: "Annuler", style: "cancel" },
-        { text: "Valider", onPress: (pin?: string) => {
-          if (pin === profile.pin) { dispatch(setActiveProfileId(profile.id)); navigation.navigate('HealthQuestionnaire'); }
-          else Alert.alert("Erreur", "Code PIN incorrect.");
-        }}
-      ], "secure-text");
-    } else {
-      dispatch(setActiveProfileId(profile.id));
-      navigation.navigate('HealthQuestionnaire');
-    }
-  };
+ 
+     if (profile.pin) {
+       Alert.prompt("Code PIN", "Entrez le code PIN de ce profil", [
+         { text: "Annuler", style: "cancel" },
+         { text: "Valider", onPress: (pin?: string) => {
+           if (pin === profile.pin) { dispatch(setActiveProfileId(profile.id)); }
+           else Alert.alert("Erreur", "Code PIN incorrect.");
+         }}
+       ], "secure-text");
+     } else {
+       dispatch(setActiveProfileId(profile.id));
+     }
+   };
 
   const handleDeleteProfile = (profile: Profile) => {
     if (profile.id === 'main') { Alert.alert("Action impossible", "Le profil principal ne peut pas être supprimé."); return; }

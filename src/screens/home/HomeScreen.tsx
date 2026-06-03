@@ -55,7 +55,7 @@ export default function HomeScreen({ navigation }: any) {
             <Text style={[Typography.caption, { textTransform: 'uppercase', letterSpacing: 0.5 }]}>
               Tableau de bord
             </Text>
-            <Text style={[Typography.h1, { marginTop: 4, color: '#FFFFFF' }]}>
+            <Text style={[Typography.h1, { marginTop: 4, color: Colors.textPrimary }]}>
               {profile.name || 'Patient'}
             </Text>
           </View>
@@ -149,7 +149,7 @@ export default function HomeScreen({ navigation }: any) {
             <View className="w-12 h-12 rounded-2xl items-center justify-center mb-4" style={{ backgroundColor: Colors.error + '20' }}>
               <Ionicons name="heart" size={24} color={Colors.error} />
             </View>
-            <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>Fréquence</Text>
+            <Text style={[Typography.bodyMedium, { color: Colors.textPrimary }]}>Fréquence</Text>
             <Text style={[Typography.caption, { marginTop: 4 }]}>Capteur optique</Text>
           </TouchableOpacity>
 
@@ -164,7 +164,7 @@ export default function HomeScreen({ navigation }: any) {
             <View className="w-12 h-12 rounded-2xl items-center justify-center mb-4" style={{ backgroundColor: Colors.primaryLight }}>
               <Ionicons name="scan" size={24} color={Colors.primary} />
             </View>
-            <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>Scanner</Text>
+            <Text style={[Typography.bodyMedium, { color: Colors.textPrimary }]}>Scanner</Text>
             <Text style={[Typography.caption, { marginTop: 4 }]}>Analyse d'ordonnance</Text>
           </TouchableOpacity>
 
@@ -180,7 +180,7 @@ export default function HomeScreen({ navigation }: any) {
               <Ionicons name="restaurant" size={24} color={Colors.primary} />
             </View>
             <View className="flex-1">
-              <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>Nutrition IA</Text>
+              <Text style={[Typography.bodyMedium, { color: Colors.textPrimary }]}>Nutrition IA</Text>
               <Text style={[Typography.caption, { marginTop: 4 }]}>Analyse de repas par photo</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={Colors.textMuted} />
@@ -198,7 +198,7 @@ export default function HomeScreen({ navigation }: any) {
               <Ionicons name="medical" size={24} color={Colors.warning} />
             </View>
             <View className="flex-1">
-              <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>Triage d'Urgence</Text>
+              <Text style={[Typography.bodyMedium, { color: Colors.textPrimary }]}>Triage d'Urgence</Text>
               <Text style={[Typography.caption, { marginTop: 4 }]}>Évaluation des symptômes</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={Colors.textMuted} />

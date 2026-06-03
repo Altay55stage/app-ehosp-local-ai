@@ -32,10 +32,7 @@ export default function ConsentScreen({ navigation }: any) {
     } catch {}
     setIsSubmitting(false);
     dispatch(setHasAcceptedConsent(true));
-    if (navigation?.replace) {
-      navigation.replace('Biometric');
-    }
-  }, [user, canContinue, dispatch, navigation]);
+  }, [user, canContinue, dispatch]);
 
   const CheckBox = ({ checked, onPress, children }: { checked: boolean; onPress: () => void; children: React.ReactNode }) => (
     <TouchableOpacity activeOpacity={0.7} onPress={onPress}
@@ -55,7 +52,7 @@ export default function ConsentScreen({ navigation }: any) {
           <View style={{ width: 140, height: 140 }}>
             <LottieView source={{ uri: 'https://assets3.lottiefiles.com/packages/lf20_m6cu96ze.json' }} autoPlay loop style={{ width: '100%', height: '100%' }} />
           </View>
-          <Text style={[Typography.h1, { marginTop: 16, textAlign: 'center', color: '#FFFFFF' }]}>Confidentialité</Text>
+          <Text style={[Typography.h1, { marginTop: 16, textAlign: 'center', color: Colors.textPrimary }]}>Confidentialité</Text>
           <Text style={[Typography.body, { color: Colors.textSecondary, textAlign: 'center', marginTop: 12, paddingHorizontal: 16, lineHeight: 26 }]}>
             Votre santé est privée. eHosp utilise des technologies de pointe pour la protéger.
           </Text>

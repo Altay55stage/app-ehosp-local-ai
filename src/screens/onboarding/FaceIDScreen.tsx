@@ -40,7 +40,6 @@ export default function FaceIDScreen({ navigation }: any) {
   const completeAuth = async () => {
     if (user) await AsyncStorage.setItem(`@biometric_verified_${user.uid}`, 'true');
     dispatch(setBiometricVerified(true));
-    navigation.replace('ProfileSelection');
   };
 
   return (

@@ -194,7 +194,7 @@ export default function TriageScreen({ navigation }: any) {
     <View className="flex-row justify-center mb-4 px-6">
       {['zones', 'pain', 'duration'].map((step, index) => (
         <View key={step} className="flex-1 mx-1">
-          <View className="h-1 rounded-full" style={{ backgroundColor: index <= ['zones', 'pain', 'duration'].indexOf(currentStep) ? Colors.primary : 'rgba(255,255,255,0.2)' }} />
+          <View className="h-1.5 rounded-full" style={{ backgroundColor: index <= ['zones', 'pain', 'duration'].indexOf(currentStep) ? Colors.primary : Colors.border }} />
         </View>
       ))}
     </View>
@@ -202,18 +202,18 @@ export default function TriageScreen({ navigation }: any) {
 
   if (showResult) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
         <View className="px-6 pt-4 pb-2 flex-row items-center">
           <TouchableOpacity 
             onPress={reset}
             className="w-10 h-10 items-center justify-center rounded-full mr-3"
-            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+            style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}
             accessibilityRole="button"
             accessibilityLabel="Recommencer"
           >
-            <Ionicons name="refresh" size={22} color="#FFFFFF" />
+            <Ionicons name="refresh" size={22} color={Colors.textPrimary} />
           </TouchableOpacity>
-          <Text style={[Typography.h2, { color: '#FFFFFF' }]}>Résultat du Triage</Text>
+          <Text style={[Typography.h2, { color: Colors.textPrimary }]}>Résultat du Triage</Text>
         </View>
 
         <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 40 }}>
@@ -221,7 +221,7 @@ export default function TriageScreen({ navigation }: any) {
             <Animated.View
               style={{
                 transform: urgencyScore >= 8 ? [{ scale: pulseAnim }] : [],
-                backgroundColor: urgencyColor + '33',
+                backgroundColor: urgencyColor + '15',
                 width: 160, height: 160, borderRadius: 80,
                 borderWidth: 4, borderColor: urgencyColor,
                 alignItems: 'center', justifyContent: 'center'
@@ -230,7 +230,7 @@ export default function TriageScreen({ navigation }: any) {
               <Text style={{ fontSize: 52, fontWeight: 'bold', color: urgencyColor }}>{urgencyScore}</Text>
               <Text style={{ color: urgencyColor, fontSize: 12 }}>/ 10</Text>
             </Animated.View>
-            <Text style={[Typography.h3, { color: '#FFFFFF', marginTop: 16, textAlign: 'center' }]}>
+            <Text style={[Typography.h3, { color: Colors.textPrimary, marginTop: 16, textAlign: 'center' }]}>
               {urgencyLabel}
             </Text>
           </View>
@@ -239,27 +239,27 @@ export default function TriageScreen({ navigation }: any) {
             <TouchableOpacity
               onPress={callEmergency}
               className="rounded-2xl p-5 items-center mb-6"
-              style={{ backgroundColor: Colors.error, borderWidth: 2, borderColor: '#FCA5A5' }}
+              style={{ backgroundColor: Colors.error, ...Shadows.primary }}
               accessibilityRole="button"
               accessibilityLabel={`Appeler le ${emergencyNumber}`}
             >
               <Text style={[Typography.button, { color: '#FFFFFF', fontSize: 20 }]}>
                 Appeler le {emergencyNumber}
               </Text>
-              <Text style={[Typography.caption, { color: '#FECACA', marginTop: 4 }]}>
+              <Text style={[Typography.caption, { color: 'rgba(255,255,255,0.8)', marginTop: 4 }]}>
                 SAMU / Urgences
               </Text>
             </TouchableOpacity>
           )}
 
-          <View className="rounded-2xl p-4 mb-4" style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
-            <Text style={[Typography.h3, { color: '#FFFFFF', marginBottom: 12 }]}>Hôpitaux Proches</Text>
+          <View className="rounded-2xl p-4 mb-4" style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}>
+            <Text style={[Typography.h3, { color: Colors.textPrimary, marginBottom: 12 }]}>Hôpitaux Proches</Text>
             {nearbyHospitals.length === 0 ? (
               <TouchableOpacity
                 onPress={findNearbyHospitals}
                 disabled={loadingLocation}
                 className="rounded-xl p-4 items-center"
-                style={{ backgroundColor: Colors.primary + '33', borderWidth: 1, borderColor: Colors.primary }}
+                style={{ backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primary }}
               >
                 <Text style={[Typography.bodyMedium, { color: Colors.primary }]}>
                   {loadingLocation ? 'Localisation...' : 'Trouver les hôpitaux autour de moi'}
@@ -267,20 +267,20 @@ export default function TriageScreen({ navigation }: any) {
               </TouchableOpacity>
             ) : (
               nearbyHospitals.map((h, i) => (
-                <View key={`${h.id}-${i}`} className="rounded-xl p-3 mb-2" style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
+                <View key={`${h.id}-${i}`} className="rounded-xl p-3 mb-2" style={{ borderWidth: 1, borderColor: Colors.border, backgroundColor: Colors.background }}>
                   <View className="flex-row justify-between items-start">
                     <View className="flex-1 mr-2">
-                      <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]} numberOfLines={1}>{h.name}</Text>
-                      <Text style={[Typography.caption, { marginTop: 2 }]}>{h.address}</Text>
+                      <Text style={[Typography.bodyMedium, { color: Colors.textPrimary }]} numberOfLines={1}>{h.name}</Text>
+                      <Text style={[Typography.caption, { color: Colors.textSecondary, marginTop: 2 }]}>{h.address}</Text>
                       <Text style={[Typography.caption, { color: Colors.success, marginTop: 4 }]}>📍 {h.distance} km</Text>
                     </View>
                     <View className="flex-row" style={{ gap: 6 }}>
-                      <TouchableOpacity onPress={() => openInMaps(h.lat, h.lon, h.name)} className="px-3 py-1.5 rounded-lg" style={{ backgroundColor: Colors.primary + '33' }}>
-                        <Text style={[Typography.caption, { color: Colors.primary }]}>GPS</Text>
+                      <TouchableOpacity onPress={() => openInMaps(h.lat, h.lon, h.name)} className="px-3 py-1.5 rounded-lg" style={{ backgroundColor: Colors.primaryLight }}>
+                        <Text style={[Typography.caption, { color: Colors.primary, fontWeight: '700' }]}>GPS</Text>
                       </TouchableOpacity>
                       {h.phone && (
-                        <TouchableOpacity onPress={() => Linking.openURL(`tel:${h.phone}`)} className="px-3 py-1.5 rounded-lg" style={{ backgroundColor: 'rgba(16,185,129,0.4)' }}>
-                          <Text style={[Typography.caption, { color: Colors.success }]}>Appel</Text>
+                        <TouchableOpacity onPress={() => Linking.openURL(`tel:${h.phone}`)} className="px-3 py-1.5 rounded-lg" style={{ backgroundColor: Colors.primaryLight }}>
+                          <Text style={[Typography.caption, { color: Colors.success, fontWeight: '700' }]}>Appel</Text>
                         </TouchableOpacity>
                       )}
                     </View>
@@ -290,17 +290,17 @@ export default function TriageScreen({ navigation }: any) {
             )}
           </View>
 
-          <View className="rounded-2xl p-4 mb-4" style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}>
-            <Text style={[Typography.h3, { color: '#FFFFFF', marginBottom: 12 }]}>Spécialistes Recommandés</Text>
+          <View className="rounded-2xl p-4 mb-4" style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}>
+            <Text style={[Typography.h3, { color: Colors.textPrimary, marginBottom: 12 }]}>Spécialistes Recommandés</Text>
             {[...new Set(selectedZones.flatMap(z => BODY_ZONES.find(b => b.id === z)?.specialists || []))].map(spec => (
-              <View key={spec} className="rounded-lg p-2 mb-1" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
-                <Text style={[Typography.body, { color: '#FFFFFF' }]}>{spec}</Text>
+              <View key={spec} className="rounded-lg p-3 mb-2" style={{ backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border }}>
+                <Text style={[Typography.body, { color: Colors.textPrimary }]}>{spec}</Text>
               </View>
             ))}
           </View>
 
-          <TouchableOpacity onPress={reset} className="rounded-2xl p-4 items-center" style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' }}>
-            <Text style={[Typography.bodyMedium, { color: '#CBD5E1' }]}>Recommencer le triage</Text>
+          <TouchableOpacity onPress={reset} className="rounded-2xl p-4 items-center" style={{ borderWidth: 1, borderColor: Colors.border, backgroundColor: Colors.surface, ...Shadows.sm }}>
+            <Text style={[Typography.bodyMedium, { color: Colors.textSecondary }]}>Recommencer le triage</Text>
           </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
@@ -308,21 +308,21 @@ export default function TriageScreen({ navigation }: any) {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 40 }}>
         {/* Header with back button */}
         <View className="px-6 pt-4 pb-2 flex-row items-center">
           <TouchableOpacity 
             onPress={() => navigation.goBack()}
             className="w-10 h-10 items-center justify-center rounded-full mr-3"
-            style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+            style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}
             accessibilityRole="button"
             accessibilityLabel="Retour"
           >
-            <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
+            <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
           </TouchableOpacity>
           <View className="flex-1">
-            <Text style={[Typography.h2, { color: '#FFFFFF' }]}>Triage IA</Text>
+            <Text style={[Typography.h2, { color: Colors.textPrimary }]}>Triage IA</Text>
             <Text style={[Typography.caption, { marginTop: 2 }]}>Évaluation d'urgence par intelligence artificielle</Text>
           </View>
         </View>
@@ -332,7 +332,7 @@ export default function TriageScreen({ navigation }: any) {
         {/* Zones */}
         {currentStep === 'zones' && (
           <View className="px-6 mt-4">
-            <Text style={[Typography.h3, { color: '#FFFFFF', marginBottom: 12 }]}>Où avez-vous mal ?</Text>
+            <Text style={[Typography.h3, { color: Colors.textPrimary, marginBottom: 12 }]}>Où avez-vous mal ?</Text>
             <View className="flex-row flex-wrap">
               {BODY_ZONES.map(zone => {
                 const isSelected = selectedZones.includes(zone.id);
@@ -343,15 +343,16 @@ export default function TriageScreen({ navigation }: any) {
                     className="m-1 px-4 py-3 rounded-2xl flex-row items-center"
                     style={{
                       borderWidth: 1.5,
-                      borderColor: isSelected ? Colors.error : 'rgba(255,255,255,0.2)',
-                      backgroundColor: isSelected ? Colors.error + '33' : 'rgba(255,255,255,0.05)',
+                      borderColor: isSelected ? Colors.error : Colors.border,
+                      backgroundColor: isSelected ? Colors.error + '10' : Colors.surface,
+                      ...Shadows.sm,
                     }}
                     accessibilityRole="checkbox"
                     accessibilityState={{ checked: isSelected }}
                     accessibilityLabel={zone.label}
                   >
                     <Text style={{ fontSize: 20 }}>{zone.emoji}</Text>
-                    <Text style={[Typography.bodyMedium, { color: isSelected ? '#FCA5A5' : '#CBD5E1', marginLeft: 8 }]}>
+                    <Text style={[Typography.bodyMedium, { color: isSelected ? Colors.error : Colors.textSecondary, marginLeft: 8 }]}>
                       {zone.label}
                     </Text>
                   </TouchableOpacity>
@@ -362,7 +363,7 @@ export default function TriageScreen({ navigation }: any) {
               <TouchableOpacity 
                 onPress={() => setCurrentStep('pain')}
                 className="rounded-2xl p-4 items-center mt-6"
-                style={{ backgroundColor: Colors.primary }}
+                style={{ backgroundColor: Colors.primary, ...Shadows.primary }}
                 accessibilityRole="button"
                 accessibilityLabel="Continuer"
               >
@@ -375,7 +376,7 @@ export default function TriageScreen({ navigation }: any) {
         {/* Pain Level */}
         {currentStep === 'pain' && (
           <View className="px-6 mt-4">
-            <Text style={[Typography.h3, { color: '#FFFFFF', marginBottom: 12 }]}>Niveau de douleur : {painLevel}/10</Text>
+            <Text style={[Typography.h3, { color: Colors.textPrimary, marginBottom: 12 }]}>Niveau de douleur : {painLevel}/10</Text>
             <Text style={{ fontSize: 48, textAlign: 'center', marginVertical: 12 }}>{PAIN_FACES[painLevel]}</Text>
             <View className="flex-row justify-between mt-2">
               {Array.from({ length: 11 }, (_, i) => (
@@ -386,14 +387,14 @@ export default function TriageScreen({ navigation }: any) {
                     width: (width - 60) / 11 - 2,
                     height: 40,
                     borderRadius: 8,
-                    backgroundColor: i <= painLevel ? URGENCY_COLORS[i] || Colors.error : 'rgba(255,255,255,0.1)',
+                    backgroundColor: i <= painLevel ? URGENCY_COLORS[i] || Colors.error : Colors.border,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
                   accessibilityRole="button"
                   accessibilityLabel={`Douleur ${i}`}
                 >
-                  <Text style={{ color: '#FFFFFF', fontSize: 10, fontWeight: 'bold' }}>{i}</Text>
+                  <Text style={{ color: i <= painLevel ? '#FFFFFF' : Colors.textSecondary, fontSize: 10, fontWeight: 'bold' }}>{i}</Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -401,14 +402,14 @@ export default function TriageScreen({ navigation }: any) {
               <TouchableOpacity 
                 onPress={() => setCurrentStep('zones')}
                 className="flex-1 rounded-2xl p-4 items-center"
-                style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' }}
+                style={{ borderWidth: 1, borderColor: Colors.border, backgroundColor: Colors.surface, ...Shadows.sm }}
               >
-                <Text style={[Typography.bodyMedium, { color: '#CBD5E1' }]}>Retour</Text>
+                <Text style={[Typography.bodyMedium, { color: Colors.textSecondary }]}>Retour</Text>
               </TouchableOpacity>
               <TouchableOpacity 
                 onPress={() => setCurrentStep('duration')}
                 className="flex-1 rounded-2xl p-4 items-center"
-                style={{ backgroundColor: Colors.primary }}
+                style={{ backgroundColor: Colors.primary, ...Shadows.primary }}
               >
                 <Text style={[Typography.button, { color: '#FFFFFF' }]}>Continuer</Text>
               </TouchableOpacity>
@@ -419,7 +420,7 @@ export default function TriageScreen({ navigation }: any) {
         {/* Duration */}
         {currentStep === 'duration' && (
           <View className="px-6 mt-4">
-            <Text style={[Typography.h3, { color: '#FFFFFF', marginBottom: 16 }]}>Depuis quand ?</Text>
+            <Text style={[Typography.h3, { color: Colors.textPrimary, marginBottom: 16 }]}>Depuis quand ?</Text>
             <View className="flex-row flex-wrap" style={{ gap: 8 }}>
               {[
                 { key: 'sudden', label: 'Soudain (< 1h)', icon: '⚡' },
@@ -433,14 +434,15 @@ export default function TriageScreen({ navigation }: any) {
                   className="w-[48%] rounded-2xl p-4 items-center"
                   style={{
                     borderWidth: 1.5,
-                    borderColor: duration === d.key ? Colors.primary : 'rgba(255,255,255,0.2)',
-                    backgroundColor: duration === d.key ? Colors.primary + '20' : 'rgba(255,255,255,0.05)',
+                    borderColor: duration === d.key ? Colors.primary : Colors.border,
+                    backgroundColor: duration === d.key ? Colors.primaryLight : Colors.surface,
+                    ...Shadows.sm,
                   }}
                   accessibilityRole="radio"
                   accessibilityState={{ selected: duration === d.key }}
                 >
                   <Text style={{ fontSize: 24, marginBottom: 8 }}>{d.icon}</Text>
-                  <Text style={[Typography.bodyMedium, { color: duration === d.key ? Colors.primary : '#CBD5E1', textAlign: 'center' }]}>
+                  <Text style={[Typography.bodyMedium, { color: duration === d.key ? Colors.primary : Colors.textSecondary, textAlign: 'center' }]}>
                     {d.label}
                   </Text>
                 </TouchableOpacity>
@@ -450,15 +452,15 @@ export default function TriageScreen({ navigation }: any) {
               <TouchableOpacity 
                 onPress={() => setCurrentStep('pain')}
                 className="flex-1 rounded-2xl p-4 items-center"
-                style={{ borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' }}
+                style={{ borderWidth: 1, borderColor: Colors.border, backgroundColor: Colors.surface, ...Shadows.sm }}
               >
-                <Text style={[Typography.bodyMedium, { color: '#CBD5E1' }]}>Retour</Text>
+                <Text style={[Typography.bodyMedium, { color: Colors.textSecondary }]}>Retour</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={calculateUrgency}
                 disabled={!duration}
                 className="flex-1 rounded-2xl p-4 items-center"
-                style={{ backgroundColor: duration ? Colors.error : 'rgba(255,255,255,0.1)' }}
+                style={{ backgroundColor: duration ? Colors.error : Colors.border, ...Shadows.primary }}
                 accessibilityRole="button"
                 accessibilityLabel="Évaluer l'urgence"
               >
@@ -475,11 +477,11 @@ export default function TriageScreen({ navigation }: any) {
           <TouchableOpacity 
             onPress={callEmergency} 
             className="rounded-2xl p-4 items-center"
-            style={{ borderWidth: 1, borderColor: Colors.error + '80' }}
+            style={{ borderWidth: 1, borderColor: Colors.error, backgroundColor: Colors.surface, ...Shadows.sm }}
             accessibilityRole="button"
             accessibilityLabel={`Appeler directement le ${emergencyNumber}`}
           >
-            <Text style={[Typography.bodyMedium, { color: '#F87171' }]}>
+            <Text style={[Typography.bodyMedium, { color: Colors.error, fontWeight: '700' }]}>
               Appeler directement le {emergencyNumber}
             </Text>
           </TouchableOpacity>

@@ -60,7 +60,7 @@ export default function PreDiagnosticScreen({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -75,29 +75,30 @@ export default function PreDiagnosticScreen({ navigation }: any) {
             <TouchableOpacity 
               onPress={() => navigation.goBack()}
               className="w-10 h-10 items-center justify-center rounded-full mr-3"
-              style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+              style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}
               accessibilityRole="button"
               accessibilityLabel="Retour"
             >
-              <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
+              <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
             </TouchableOpacity>
             <View className="flex-1">
-              <Text style={[Typography.h2, { color: '#FFFFFF' }]}>Prédiagnostic</Text>
+              <Text style={[Typography.h2, { color: Colors.textPrimary }]}>Prédiagnostic</Text>
               <Text style={[Typography.caption, { marginTop: 2 }]}>Analyse IA de vos symptômes</Text>
             </View>
           </View>
 
           <View className="flex-1 px-6 py-6">
-            <Text style={[Typography.body, { color: '#94A3B8', marginBottom: 16 }]}>
+            <Text style={[Typography.body, { color: Colors.textSecondary, marginBottom: 16 }]}>
               Décrivez vos symptômes en détail. Le prédiagnostic sera généré par Dr. IA et ajouté à votre dossier.
             </Text>
 
             <View 
-              className="rounded-xl p-4 mb-6"
+              className="rounded-2xl p-4 mb-6"
               style={{ 
-                backgroundColor: 'rgba(255,255,255,0.05)',
+                backgroundColor: Colors.surface,
                 borderWidth: 1.5,
-                borderColor: 'rgba(255,255,255,0.1)',
+                borderColor: Colors.border,
+                ...Shadows.sm,
               }}
             >
               <TextInput
@@ -107,7 +108,7 @@ export default function PreDiagnosticScreen({ navigation }: any) {
                 numberOfLines={8}
                 style={{ 
                   minHeight: 160, 
-                  color: '#FFFFFF', 
+                  color: Colors.textPrimary, 
                   fontSize: 16,
                   lineHeight: 24,
                 }}
@@ -116,28 +117,29 @@ export default function PreDiagnosticScreen({ navigation }: any) {
               />
             </View>
 
-            <Text style={[Typography.label, { color: '#94A3B8', marginBottom: 12 }]}>
+            <Text style={[Typography.label, { color: Colors.textSecondary, marginBottom: 12 }]}>
               Langue du rapport
             </Text>
             <View className="flex-row mb-6" style={{ gap: 12 }}>
               {LANGUAGES.map((lang) => (
                 <TouchableOpacity
-                  key={lang.code}
-                  onPress={() => setLanguage(lang.code)}
-                  className="flex-1 rounded-xl py-3 items-center"
-                  style={{
-                    borderWidth: 1.5,
-                    borderColor: language === lang.code ? Colors.primary : 'rgba(255,255,255,0.2)',
-                    backgroundColor: language === lang.code ? Colors.primary + '20' : 'rgba(255,255,255,0.05)',
-                  }}
-                  accessibilityRole="radio"
-                  accessibilityState={{ selected: language === lang.code }}
-                  accessibilityLabel={lang.label}
+                   key={lang.code}
+                   onPress={() => setLanguage(lang.code)}
+                   className="flex-1 rounded-2xl py-3 items-center"
+                   style={{
+                     borderWidth: 1.5,
+                     borderColor: language === lang.code ? Colors.primary : Colors.border,
+                     backgroundColor: language === lang.code ? Colors.primaryLight : Colors.surface,
+                     ...Shadows.sm,
+                   }}
+                   accessibilityRole="radio"
+                   accessibilityState={{ selected: language === lang.code }}
+                   accessibilityLabel={lang.label}
                 >
                   <Text style={{ fontSize: 24, marginBottom: 4 }}>{lang.flag}</Text>
                   <Text style={[
                     Typography.bodyMedium, 
-                    { color: language === lang.code ? Colors.primary : '#CBD5E1' }
+                    { color: language === lang.code ? Colors.primary : Colors.textSecondary }
                   ]}>
                     {lang.label}
                   </Text>

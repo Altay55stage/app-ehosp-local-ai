@@ -98,20 +98,20 @@ export default function MedicalTimelineScreen({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <View className="px-6 pt-6 pb-4 flex-row items-center justify-between">
         <View>
-          <Text style={[Typography.h1, { color: '#FFFFFF' }]}>Timeline</Text>
+          <Text style={[Typography.h1, { color: Colors.textPrimary }]}>Timeline</Text>
           <Text style={[Typography.caption, { marginTop: 4 }]}>Historique interactif de votre santé</Text>
         </View>
         <TouchableOpacity 
           onPress={() => navigation.goBack()}
           className="w-10 h-10 items-center justify-center rounded-full"
-          style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
+          style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}
           accessibilityRole="button"
           accessibilityLabel="Retour"
         >
-          <Ionicons name="chevron-back" size={22} color="#FFFFFF" />
+          <Ionicons name="chevron-back" size={22} color={Colors.textPrimary} />
         </TouchableOpacity>
       </View>
 
@@ -133,7 +133,7 @@ export default function MedicalTimelineScreen({ navigation }: any) {
                   <Skeleton width={40} height={40} borderRadius={20} />
                   {i < 3 && <Skeleton width={2} height={60} style={{ marginTop: 8 }} />}
                 </View>
-                <View className="flex-1 rounded-3xl p-5" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                <View className="flex-1 rounded-3xl p-5" style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}>
                   <Skeleton width={100} height={12} style={{ marginBottom: 8 }} />
                   <Skeleton width="80%" height={16} style={{ marginBottom: 8 }} />
                   <Skeleton width="60%" height={12} />
@@ -145,11 +145,11 @@ export default function MedicalTimelineScreen({ navigation }: any) {
           <View className="items-center justify-center px-10" style={{ marginTop: 80 }}>
             <View 
               className="w-24 h-24 rounded-full items-center justify-center mb-6"
-              style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}
+              style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}
             >
               <Ionicons name="document-text-outline" size={48} color={Colors.textMuted} />
             </View>
-            <Text style={[Typography.h3, { color: '#FFFFFF', textAlign: 'center', marginBottom: 8 }]}>
+            <Text style={[Typography.h3, { color: Colors.textPrimary, textAlign: 'center', marginBottom: 8 }]}>
               Aucun événement
             </Text>
             <Text style={[Typography.body, { color: Colors.textSecondary, textAlign: 'center', marginBottom: 24 }]}>
@@ -158,7 +158,7 @@ export default function MedicalTimelineScreen({ navigation }: any) {
             <TouchableOpacity
               onPress={() => navigation.navigate('Chat')}
               className="rounded-2xl px-6 py-3"
-              style={{ backgroundColor: Colors.primary }}
+              style={{ backgroundColor: Colors.primary, ...Shadows.primary }}
               accessibilityRole="button"
               accessibilityLabel="Commencer une consultation"
             >
@@ -181,31 +181,31 @@ export default function MedicalTimelineScreen({ navigation }: any) {
                 <View className="items-center mr-4">
                   <View 
                     className="w-10 h-10 rounded-full items-center justify-center z-10"
-                    style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
+                    style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}
                   >
                     {renderIcon(event.type)}
                   </View>
                   {index !== events.length - 1 && (
-                    <View style={{ width: 2, flex: 1, backgroundColor: 'rgba(255,255,255,0.1)', marginVertical: 4 }} />
+                    <View style={{ width: 2, flex: 1, backgroundColor: Colors.border, marginVertical: 4 }} />
                   )}
                 </View>
 
                 <View 
                   className="flex-1 rounded-3xl p-5 mb-6"
-                  style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
+                  style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}
                 >
                   <View className="flex-row justify-between items-start mb-2">
-                    <Text style={[Typography.caption, { color: '#94A3B8' }]}>
+                    <Text style={[Typography.caption, { color: Colors.textSecondary }]}>
                       {new Date(event.timestamp).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </Text>
-                    <View className="px-2 py-0.5 rounded-full" style={{ backgroundColor: getTypeColor(event.type) + '20' }}>
+                    <View className="px-2 py-0.5 rounded-full" style={{ backgroundColor: getTypeColor(event.type) + '15' }}>
                       <Text style={[Typography.caption, { color: getTypeColor(event.type), textTransform: 'uppercase', fontSize: 10 }]}>
                         {event.type}
                       </Text>
                     </View>
                   </View>
-                  <Text style={[Typography.h3, { color: '#FFFFFF' }]}>{event.title}</Text>
-                  <Text style={[Typography.body, { color: '#94A3B8', marginTop: 4 }]}>{event.subtitle}</Text>
+                  <Text style={[Typography.h3, { color: Colors.textPrimary }]}>{event.title}</Text>
+                  <Text style={[Typography.body, { color: Colors.textSecondary, marginTop: 4 }]}>{event.subtitle}</Text>
                   
                   <View className="flex-row items-center mt-4">
                     <Text style={[Typography.caption, { color: Colors.primary }]}>Voir les détails</Text>

@@ -6,38 +6,38 @@
 export const Colors = {
   // Primary palette
   primary: '#10B981',
-  primaryLight: 'rgba(16, 185, 129, 0.12)',
+  primaryLight: 'rgba(16, 185, 129, 0.06)',
   primaryDark: '#059669',
   
-  // Secondary / Text
-  secondary: '#FFFFFF',
-  secondaryLight: '#E2E8F0',
+  // Secondary
+  secondary: '#111827',
+  secondaryLight: '#F1F5F9',
   
   // Backgrounds
-  background: '#0F172A',
-  surface: '#1E293B',
-  surfaceElevated: '#273549',
+  background: '#F8F9FB', // Blanc cassé background
+  surface: '#FFFFFF',    // Pure white cards/containers
+  surfaceElevated: '#F1F5F9',
   
-  // Dark mode
-  dark: '#0F172A',
-  darkSurface: '#1E293B',
-  darkBorder: 'rgba(255, 255, 255, 0.08)',
+  // Dark mode compatibility (mapping to light tokens to enforce light off-white theme)
+  dark: '#F8F9FB',
+  darkSurface: '#FFFFFF',
+  darkBorder: '#E2E8F0',
   
   // Borders
-  border: 'rgba(255, 255, 255, 0.08)',
-  borderLight: 'rgba(255, 255, 255, 0.05)',
+  border: '#E2E8F0',
+  borderLight: '#F1F5F9',
   
   // Text
-  textPrimary: '#FFFFFF',
-  textSecondary: '#94A3B8',
-  textMuted: '#64748B',
-  textInverse: '#0F172A',
+  textPrimary: '#111827',    // Sleek dark grey/black text
+  textSecondary: '#4B5563',  // Slate grey for descriptions
+  textMuted: '#9CA3AF',
+  textInverse: '#FFFFFF',    // White text inside primary buttons
   
   // Status
   success: '#10B981',
   warning: '#F59E0B',
   error: '#EF4444',
-  info: '#38BDF8',
+  info: '#3B82F6',
   
   // Urgency scale (index 0-9)
   urgency: [
@@ -53,10 +53,10 @@ export const Colors = {
     '#450A0A', // 9 - Maximum urgency
   ] as const,
   
-  // Glass effect
-  glass: 'rgba(255, 255, 255, 0.05)',
-  glassDark: 'rgba(0, 0, 0, 0.2)',
-  glassBorder: 'rgba(255, 255, 255, 0.05)',
+  // Glass effect (adapted for light mode)
+  glass: 'rgba(255, 255, 255, 0.8)',
+  glassDark: 'rgba(17, 24, 39, 0.05)',
+  glassBorder: 'rgba(17, 24, 39, 0.08)',
 } as const;
 
 export const Spacing = {

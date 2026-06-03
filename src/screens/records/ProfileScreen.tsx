@@ -52,34 +52,34 @@ export default function ProfileScreen({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.dark }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <ScrollView style={{ flex: 1, paddingHorizontal: 24 }}>
-        <View style={{ paddingVertical: 24, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.1)', marginBottom: 24, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <View style={{ paddingVertical: 24, borderBottomWidth: 1, borderBottomColor: Colors.border, marginBottom: 24, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <View>
-            <Text style={[Typography.h1, { color: '#FFFFFF' }]}>Mon Dossier</Text>
-            <Text style={[Typography.caption, { color: '#94A3B8', marginTop: 4 }]}>Informations liées à votre profil actuel.</Text>
+            <Text style={[Typography.h1, { color: Colors.textPrimary }]}>Mon Dossier</Text>
+            <Text style={[Typography.caption, { color: Colors.textSecondary, marginTop: 4 }]}>Informations liées à votre profil actuel.</Text>
           </View>
           <View style={{ flexDirection: 'row', gap: 8 }}>
             <TouchableOpacity onPress={() => { dispatch(setUserRole(null as any)); dispatch(setActiveProfileId(null)); }}
-              style={{ backgroundColor: Colors.warning + '15', borderWidth: 1, borderColor: Colors.warning + '40', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8 }}
+              style={{ backgroundColor: Colors.warning + '15', borderWidth: 1, borderColor: Colors.warning + '30', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8 }}
               accessibilityRole="button" accessibilityLabel="Changer de portail">
               <Text style={{ fontSize: 10, fontWeight: '700', color: Colors.warning }}>Portail</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => dispatch(setActiveProfileId(null))}
-              style={{ backgroundColor: 'rgba(255,255,255,0.1)', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)' }}
+              style={{ backgroundColor: Colors.surface, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 8, borderWidth: 1, borderColor: Colors.border, ...Shadows.sm }}
               accessibilityRole="button" accessibilityLabel="Changer de profil">
-              <Text style={{ fontSize: 10, fontWeight: '700', color: '#FFFFFF' }}>Profil</Text>
+              <Text style={{ fontSize: 10, fontWeight: '700', color: Colors.textPrimary }}>Profil</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <View style={{ backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)', borderRadius: 16, padding: 16, marginBottom: 24 }}>
+        <View style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: 16, padding: 16, marginBottom: 24, ...Shadows.sm }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <View>
-              <Text style={[Typography.caption, { color: '#94A3B8', textTransform: 'uppercase' }]}>Statut Santé</Text>
-              <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>Questionnaire de santé</Text>
+              <Text style={[Typography.caption, { color: Colors.textSecondary, textTransform: 'uppercase' }]}>Statut Santé</Text>
+              <Text style={[Typography.bodyMedium, { color: Colors.textPrimary }]}>Questionnaire de santé</Text>
             </View>
-            <View style={{ paddingHorizontal: 12, paddingVertical: 4, borderRadius: 999, backgroundColor: hasCompletedQuestionnaire ? Colors.success + '20' : Colors.warning + '20' }}>
+            <View style={{ paddingHorizontal: 12, paddingVertical: 4, borderRadius: 999, backgroundColor: hasCompletedQuestionnaire ? Colors.success + '15' : Colors.warning + '15' }}>
               <Text style={{ fontSize: 10, fontWeight: '700', color: hasCompletedQuestionnaire ? Colors.success : Colors.warning }}>
                 {hasCompletedQuestionnaire ? 'Complété' : 'À faire'}
               </Text>
@@ -87,7 +87,7 @@ export default function ProfileScreen({ navigation }: any) {
           </View>
           {!hasCompletedQuestionnaire && (
             <TouchableOpacity onPress={() => navigation.navigate('HealthQuestionnaire')}
-              style={{ marginTop: 12, backgroundColor: Colors.warning + '20', borderWidth: 1, borderColor: Colors.warning + '40', padding: 8, borderRadius: 12, alignItems: 'center' }}
+              style={{ marginTop: 12, backgroundColor: Colors.warning + '15', borderWidth: 1, borderColor: Colors.warning + '30', padding: 8, borderRadius: 12, alignItems: 'center' }}
               accessibilityRole="button" accessibilityLabel="Remplir le questionnaire">
               <Text style={{ fontSize: 10, fontWeight: '700', color: Colors.warning }}>Remplir le questionnaire</Text>
             </TouchableOpacity>
@@ -113,16 +113,16 @@ export default function ProfileScreen({ navigation }: any) {
         <Input label="Traitements en cours" placeholder="Ex: Levothyrox 50" value={profile.medications} onChangeText={(val) => handleChange('medications', val)} />
         <Input label="N° Sécurité Sociale" placeholder="Ex: 1 80 01 75 001 001 01" value={user?.socialSecurityNumber || ''} onChangeText={(val) => dispatch(setUserSSN(val))} />
 
-        <View style={{ marginTop: 32, paddingTop: 24, borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.1)', marginBottom: 24 }}>
-          <Text style={[Typography.bodyMedium, { color: '#FFFFFF', marginBottom: 16 }]}>Paramètres</Text>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.05)', padding: 16, borderRadius: 16 }}>
-            <Text style={[Typography.bodyMedium, { color: '#CBD5E1' }]}>Langue</Text>
-            <View style={{ flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 999, padding: 4 }}>
+        <View style={{ marginTop: 32, paddingTop: 24, borderTopWidth: 1, borderTopColor: Colors.border, marginBottom: 24 }}>
+          <Text style={[Typography.bodyMedium, { color: Colors.textPrimary, marginBottom: 16 }]}>Paramètres</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, padding: 16, borderRadius: 16, ...Shadows.sm }}>
+            <Text style={[Typography.bodyMedium, { color: Colors.textPrimary }]}>Langue</Text>
+            <View style={{ flexDirection: 'row', backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, borderRadius: 999, padding: 4 }}>
               <TouchableOpacity style={{ backgroundColor: Colors.primary, paddingHorizontal: 12, paddingVertical: 4, borderRadius: 999 }}>
                 <Text style={{ fontSize: 10, fontWeight: '700', color: '#FFFFFF' }}>FR</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ paddingHorizontal: 12, paddingVertical: 4 }}>
-                <Text style={{ fontSize: 10, fontWeight: '700', color: '#94A3B8' }}>EN</Text>
+                <Text style={{ fontSize: 10, fontWeight: '700', color: Colors.textSecondary }}>EN</Text>
               </TouchableOpacity>
             </View>
           </View>

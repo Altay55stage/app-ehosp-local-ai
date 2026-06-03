@@ -26,7 +26,6 @@ export default function RoleSelectionScreen({ navigation }: any) {
         const collection = role === 'patient' ? 'patients' : 'doctors';
         await setDoc(doc(firestore, collection, firebaseUser.uid), { role, uid: firebaseUser.uid, email: firebaseUser.email, createdAt: Date.now() }, { merge: true });
         dispatch(setUserRole(role));
-        navigation.replace('Main');
       } catch { Alert.alert("Erreur", "Impossible de sauvegarder votre choix."); } finally { setLoading(null); }
     };
     if (role === 'doctor') {
