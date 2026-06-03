@@ -13,6 +13,7 @@ import { db, ref, get, set, child } from '../../services/FirebaseService';
 import * as DocumentPicker from 'expo-document-picker';
 import { PDFService } from '../../services/PDFService';
 import { Ionicons } from '@expo/vector-icons';
+import { Colors, Typography, Shadows } from '../../theme';
 
 
 const specialists = [
@@ -245,7 +246,7 @@ export default function ChatScreen({ navigation }: any) {
             text: `[CAPTURE PDF] : ${asset.fileName || 'image.jpg'}`,
             isUser: true,
             timestamp: Date.now() + index,
-            imageBase64: asset.base64
+            imageBase64: asset.base64 || undefined
           };
           dispatch(addMessage(userMsg));
           // On passe l'ID de session forcé pour éviter les doublons de conv
@@ -364,7 +365,7 @@ export default function ChatScreen({ navigation }: any) {
         payload, 
         history, 
         profile, 
-        activeAgentOverride,
+        activeAgentOverride || undefined,
         user.uid,
         activeProfileId,
         currentUrgencyScore,
@@ -588,7 +589,7 @@ export default function ChatScreen({ navigation }: any) {
         userMsg, 
         history, 
         profile, 
-        activeAgentOverride,
+        activeAgentOverride || undefined,
         user?.uid,
         activeProfileId ?? undefined
       );
@@ -640,7 +641,7 @@ export default function ChatScreen({ navigation }: any) {
             <Text style={{ color: Colors.textPrimary, fontSize: 12, fontWeight: '600' }}>☰ Historique</Text>
           </TouchableOpacity>
           <Text style={[Typography.h2, { color: Colors.textPrimary, fontWeight: '700' }]}>Dr. IA</Text>
-          <View style={{ flex: 1, alignItems: 'end' }}>
+          <View style={{ flex: 1, alignItems: 'flex-end' }}>
             {activeAgentOverride ? (
               <TouchableOpacity onPress={resetToGeneralist} style={{ backgroundColor: Colors.primaryLight, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999 }}>
                 <Text style={{ color: Colors.primary, fontSize: 11, fontWeight: '700' }}>← Généraliste</Text>
@@ -765,21 +766,21 @@ export default function ChatScreen({ navigation }: any) {
           <View style={{ padding: 12, flexDirection: 'row', alignItems: 'center', borderTopWidth: 1, borderColor: Colors.border, backgroundColor: Colors.surface, paddingBottom: Platform.OS === 'ios' ? 24 : 12 }}>
             <TouchableOpacity 
               onPress={openDocumentMenu}
-              style={{ width: 42, height: 42, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, borderRadius: 21, items: 'center', justifyContent: 'center', marginRight: 8, alignItems: 'center' }}
+              style={{ width: 42, height: 42, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, borderRadius: 21, justifyContent: 'center', marginRight: 8, alignItems: 'center' }}
             >
               <Ionicons name="document-attach" size={18} color={Colors.primary} />
             </TouchableOpacity>
 
             <TouchableOpacity 
               onPress={pickImage}
-              style={{ width: 42, height: 42, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, borderRadius: 21, items: 'center', justifyContent: 'center', marginRight: 8, alignItems: 'center' }}
+              style={{ width: 42, height: 42, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, borderRadius: 21, justifyContent: 'center', marginRight: 8, alignItems: 'center' }}
             >
               <Ionicons name="camera" size={18} color={Colors.primary} />
             </TouchableOpacity>
 
             <TouchableOpacity 
               onPress={() => navigation.navigate('VoiceConsultation')}
-              style={{ width: 42, height: 42, backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primary + '20', borderRadius: 21, items: 'center', justifyContent: 'center', marginRight: 12, alignItems: 'center' }}
+              style={{ width: 42, height: 42, backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primary + '20', borderRadius: 21, justifyContent: 'center', marginRight: 12, alignItems: 'center' }}
             >
               <Ionicons name="mic" size={20} color={Colors.primary} />
             </TouchableOpacity>
