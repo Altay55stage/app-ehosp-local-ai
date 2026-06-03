@@ -119,10 +119,14 @@ export class AgentOrchestrator {
     if (uid) {
       try {
         const dbRef = ref(db);
-        const questSnap = await get(child(dbRef, `users/${uid}/onboarding/questionnaire`));
+        const questPath = activeProfileId 
+          ? `users/${uid}/profiles/${activeProfileId}/questionnaire` 
+          : `users/${uid}/onboarding/questionnaire`;
+        const questSnap = await get(child(dbRef, questPath));
         if (questSnap.exists()) {
           const quest = questSnap.val();
-          questionnaireContext = `\n\n[RÉPONSES AU QUESTIONNAIRE DE SANTÉ DU PATIENT]\n${JSON.stringify(quest)}\n(Prends en compte les habitudes de vie, tabagisme, alcool, sommeil).`;
+          const answers = quest.answers || quest;
+          questionnaireContext = `\n\n[RÉPONSES AU QUESTIONNAIRE DE SANTÉ DU PATIENT (CALIBRATION DR. IA)]\n${JSON.stringify(answers)}\n(Prends en compte ces habitudes de vie, antécédents, tabagisme, alcool et sommeil dans tes diagnostics et conseils).`;
         }
 
         const allProfilesSnap = await get(child(dbRef, `users/${uid}/profiles`));

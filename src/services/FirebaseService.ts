@@ -160,10 +160,13 @@ async function localSet(refObj: any, data: any) {
     return;
   }
 
-  // Route questionnaire onboarding
-  // Format path: users/${uid}/onboarding/questionnaire
-  if (path.endsWith('/onboarding/questionnaire')) {
-    await ReactNativeAsyncStorage.setItem('ehosp_questionnaire', JSON.stringify(data));
+  // Route questionnaire onboarding (profile specific or legacy)
+  // Format path: users/${uid}/profiles/${profileId}/questionnaire OR users/${uid}/onboarding/questionnaire
+  if (path.endsWith('/questionnaire')) {
+    const parts = path.split('/');
+    const uid = parts[1];
+    const profileId = parts.includes('profiles') ? parts[parts.indexOf('profiles') + 1] : 'legacy';
+    await ReactNativeAsyncStorage.setItem(`@questionnaire_${uid}_${profileId}`, JSON.stringify(data));
     return;
   }
 
@@ -234,9 +237,12 @@ async function localGet(refObj: any) {
     };
   }
 
-  // Format path: users/${uid}/onboarding/questionnaire
-  if (path.endsWith('/onboarding/questionnaire')) {
-    const data = await ReactNativeAsyncStorage.getItem('ehosp_questionnaire');
+  // Format path: users/${uid}/profiles/${profileId}/questionnaire OR users/${uid}/onboarding/questionnaire
+  if (path.endsWith('/questionnaire')) {
+    const parts = path.split('/');
+    const uid = parts[1];
+    const profileId = parts.includes('profiles') ? parts[parts.indexOf('profiles') + 1] : 'legacy';
+    const data = await ReactNativeAsyncStorage.getItem(`@questionnaire_${uid}_${profileId}`);
     const parsed = data ? JSON.parse(data) : null;
     return {
       exists: () => parsed !== null,
