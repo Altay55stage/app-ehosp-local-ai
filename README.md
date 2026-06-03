@@ -87,14 +87,38 @@ Le serveur va :
 
 *Vous pouvez exécuter un test d'intégration autonome du serveur en lançant : `node test_pipeline.js` dans le dossier `server/`.*
 
-### 3. Démarrage de l'Application Mobile (Expo)
-Ouvrez un second terminal à la **racine** du projet :
+### 3. Démarrage de l'Application Mobile (Expo Go & Simulateur)
+
+#### Option A : Lancer sur le Simulateur iOS (Mac)
+À la racine du projet :
 ```bash
 npm install
 npm run ios
 ```
-- Pour compiler sur le simulateur iPhone de votre Mac, appuyez sur `i`.
-- Pour l'exécuter sur votre **vrai iPhone**, installez l'application **Expo Go** depuis l'App Store, assurez-vous que votre Mac et votre iPhone sont sur le **même réseau Wi-Fi**, puis configurez `EXPO_PUBLIC_BACKEND_URL` avec l'adresse IP locale de votre Mac (ex: `http://192.168.1.50:3000`) et scannez le QR Code généré par le terminal.
+Appuyez sur `i` dans le terminal pour démarrer l'application dans le simulateur iPhone de Xcode.
+
+#### Option B : Lancer sur votre vrai iPhone via Expo Go (Wi-Fi)
+Pour charger l'application en réseau sur votre iPhone physique, suivez scrupuleusement ces étapes :
+
+1. **Installer Expo Go :** Téléchargez l'application **Expo Go** depuis l'App Store de votre iPhone.
+2. **Même Réseau Wi-Fi :** Assurez-vous que votre Mac et votre iPhone sont connectés au **même réseau Wi-Fi**.
+3. **Trouver l'IP locale de votre Mac :**
+   - Ouvrez un terminal sur votre Mac et tapez : `ipconfig getifaddr en0` (ou `ifconfig | grep "inet "`).
+   - Notez l'adresse IP affichée (ex: `192.168.1.50`).
+4. **Mettre à jour la configuration (.env) :**
+   - Ouvrez le fichier `.env` à la racine du projet.
+   - Modifiez `EXPO_PUBLIC_BACKEND_URL` pour remplacer `localhost` par l'IP de votre Mac :
+     ```env
+     EXPO_PUBLIC_BACKEND_URL=http://192.168.1.50:3000
+     ```
+5. **Démarrer Expo en mode LAN :**
+   Démarrez Expo en forçant la liaison sur votre réseau local :
+   ```bash
+   npx expo start --lan
+   ```
+6. **Scanner le QR Code :**
+   - Ouvrez l'appareil photo de votre iPhone et scannez le QR Code affiché dans le terminal du Mac.
+   - Appuyez sur le lien pour ouvrir **Expo Go**. L'application se chargera et se connectera en direct au serveur SQLite de votre Mac !
 
 ---
 
