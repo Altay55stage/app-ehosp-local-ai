@@ -35,9 +35,9 @@ export default function HomeScreen({ navigation }: any) {
   }, []);
 
   const stats = [
-    { label: 'Poids', value: profile.weight ? `${profile.weight} kg` : '--', icon: 'speedometer', color: Colors.primary, bg: Colors.primaryLight },
-    { label: 'Taille', value: profile.height ? `${profile.height} cm` : '--', icon: 'resize', color: Colors.info, bg: '#E0F2FE' },
-    { label: 'Âge', value: calculateAge(profile.birthDate), icon: 'calendar', color: Colors.warning, bg: '#FEF3C7' },
+    { label: 'Poids', value: profile.weight ? `${profile.weight} kg` : '--', icon: 'speedometer', color: Colors.primary, bg: Colors.primary + '20' },
+    { label: 'Taille', value: profile.height ? `${profile.height} cm` : '--', icon: 'resize', color: Colors.info, bg: Colors.info + '20' },
+    { label: 'Âge', value: calculateAge(profile.birthDate), icon: 'calendar', color: Colors.warning, bg: Colors.warning + '20' },
   ];
 
   return (
@@ -55,7 +55,7 @@ export default function HomeScreen({ navigation }: any) {
             <Text style={[Typography.caption, { textTransform: 'uppercase', letterSpacing: 0.5 }]}>
               Tableau de bord
             </Text>
-            <Text style={[Typography.h1, { marginTop: 4 }]}>
+            <Text style={[Typography.h1, { marginTop: 4, color: '#FFFFFF' }]}>
               {profile.name || 'Patient'}
             </Text>
           </View>
@@ -75,7 +75,7 @@ export default function HomeScreen({ navigation }: any) {
           <TouchableOpacity 
             onPress={() => navigation.navigate('Subscription')}
             className="rounded-3xl p-5 mt-8 flex-row items-center"
-            style={{ backgroundColor: Colors.dark, ...Shadows.lg }}
+            style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, ...Shadows.lg }}
             accessibilityRole="button"
             accessibilityLabel="Passer au premium"
           >
@@ -146,10 +146,10 @@ export default function HomeScreen({ navigation }: any) {
             accessibilityRole="button"
             accessibilityLabel="Fréquence cardiaque"
           >
-            <View className="w-12 h-12 rounded-2xl items-center justify-center mb-4" style={{ backgroundColor: '#FEE2E2' }}>
+            <View className="w-12 h-12 rounded-2xl items-center justify-center mb-4" style={{ backgroundColor: Colors.error + '20' }}>
               <Ionicons name="heart" size={24} color={Colors.error} />
             </View>
-            <Text style={[Typography.bodyMedium]}>Fréquence</Text>
+            <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>Fréquence</Text>
             <Text style={[Typography.caption, { marginTop: 4 }]}>Capteur optique</Text>
           </TouchableOpacity>
 
@@ -164,7 +164,7 @@ export default function HomeScreen({ navigation }: any) {
             <View className="w-12 h-12 rounded-2xl items-center justify-center mb-4" style={{ backgroundColor: Colors.primaryLight }}>
               <Ionicons name="scan" size={24} color={Colors.primary} />
             </View>
-            <Text style={[Typography.bodyMedium]}>Scanner</Text>
+            <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>Scanner</Text>
             <Text style={[Typography.caption, { marginTop: 4 }]}>Analyse d'ordonnance</Text>
           </TouchableOpacity>
 
@@ -180,7 +180,7 @@ export default function HomeScreen({ navigation }: any) {
               <Ionicons name="restaurant" size={24} color={Colors.primary} />
             </View>
             <View className="flex-1">
-              <Text style={[Typography.bodyMedium]}>Nutrition IA</Text>
+              <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>Nutrition IA</Text>
               <Text style={[Typography.caption, { marginTop: 4 }]}>Analyse de repas par photo</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={Colors.textMuted} />
@@ -194,11 +194,11 @@ export default function HomeScreen({ navigation }: any) {
             accessibilityRole="button"
             accessibilityLabel="Triage d'urgence"
           >
-            <View className="w-12 h-12 rounded-2xl items-center justify-center mr-4" style={{ backgroundColor: '#FEF3C7' }}>
+            <View className="w-12 h-12 rounded-2xl items-center justify-center mr-4" style={{ backgroundColor: Colors.warning + '20' }}>
               <Ionicons name="medical" size={24} color={Colors.warning} />
             </View>
             <View className="flex-1">
-              <Text style={[Typography.bodyMedium]}>Triage d'Urgence</Text>
+              <Text style={[Typography.bodyMedium, { color: '#FFFFFF' }]}>Triage d'Urgence</Text>
               <Text style={[Typography.caption, { marginTop: 4 }]}>Évaluation des symptômes</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={Colors.textMuted} />

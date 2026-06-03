@@ -6,38 +6,38 @@
 export const Colors = {
   // Primary palette
   primary: '#10B981',
-  primaryLight: '#D1FAE5',
+  primaryLight: 'rgba(16, 185, 129, 0.12)',
   primaryDark: '#059669',
   
   // Secondary / Text
-  secondary: '#0F172A',
-  secondaryLight: '#1E293B',
+  secondary: '#FFFFFF',
+  secondaryLight: '#E2E8F0',
   
   // Backgrounds
-  background: '#F8FAFC',
-  surface: '#FFFFFF',
-  surfaceElevated: '#FFFFFF',
+  background: '#0F172A',
+  surface: '#1E293B',
+  surfaceElevated: '#273549',
   
   // Dark mode
   dark: '#0F172A',
   darkSurface: '#1E293B',
-  darkBorder: 'rgba(255, 255, 255, 0.1)',
+  darkBorder: 'rgba(255, 255, 255, 0.08)',
   
   // Borders
-  border: '#E2E8F0',
-  borderLight: '#F1F5F9',
+  border: 'rgba(255, 255, 255, 0.08)',
+  borderLight: 'rgba(255, 255, 255, 0.05)',
   
   // Text
-  textPrimary: '#0F172A',
-  textSecondary: '#64748B',
-  textMuted: '#94A3B8',
-  textInverse: '#FFFFFF',
+  textPrimary: '#FFFFFF',
+  textSecondary: '#94A3B8',
+  textMuted: '#64748B',
+  textInverse: '#0F172A',
   
   // Status
   success: '#10B981',
   warning: '#F59E0B',
   error: '#EF4444',
-  info: '#0EA5E9',
+  info: '#38BDF8',
   
   // Urgency scale (index 0-9)
   urgency: [
@@ -54,9 +54,9 @@ export const Colors = {
   ] as const,
   
   // Glass effect
-  glass: 'rgba(255, 255, 255, 0.7)',
-  glassDark: 'rgba(0, 0, 0, 0.05)',
-  glassBorder: 'rgba(255, 255, 255, 0.2)',
+  glass: 'rgba(255, 255, 255, 0.05)',
+  glassDark: 'rgba(0, 0, 0, 0.2)',
+  glassBorder: 'rgba(255, 255, 255, 0.05)',
 } as const;
 
 export const Spacing = {

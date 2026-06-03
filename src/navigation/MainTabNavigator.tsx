@@ -40,16 +40,16 @@ function TabNavigator() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopColor: '#F1F5F9',
+          backgroundColor: Colors.surface,
+          borderTopColor: Colors.border,
           height: 60,
           paddingBottom: 10,
           elevation: 10,
           shadowColor: '#000',
-          shadowOpacity: 0.05,
+          shadowOpacity: 0.2,
           shadowRadius: 10,
         },
-        tabBarActiveTintColor: isAdmin ? '#F59E0B' : (isDoctor ? '#A855F7' : '#2C5545'),
+        tabBarActiveTintColor: isAdmin ? '#F59E0B' : (isDoctor ? '#A855F7' : Colors.primary),
         tabBarInactiveTintColor: '#94A3B8',
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: any;

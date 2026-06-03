@@ -49,18 +49,18 @@ export default function ConsentScreen({ navigation }: any) {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.surface }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }}>
       <ScrollView style={{ flex: 1, paddingHorizontal: 24 }} contentContainerStyle={{ paddingBottom: 40, paddingTop: 20 }}>
         <View style={{ alignItems: 'center', marginTop: 24 }}>
           <View style={{ width: 140, height: 140 }}>
             <LottieView source={{ uri: 'https://assets3.lottiefiles.com/packages/lf20_m6cu96ze.json' }} autoPlay loop style={{ width: '100%', height: '100%' }} />
           </View>
-          <Text style={[Typography.h1, { marginTop: 16, textAlign: 'center' }]}>Confidentialité</Text>
+          <Text style={[Typography.h1, { marginTop: 16, textAlign: 'center', color: '#FFFFFF' }]}>Confidentialité</Text>
           <Text style={[Typography.body, { color: Colors.textSecondary, textAlign: 'center', marginTop: 12, paddingHorizontal: 16, lineHeight: 26 }]}>
             Votre santé est privée. eHosp utilise des technologies de pointe pour la protéger.
           </Text>
         </View>
-
+ 
         <View style={{ backgroundColor: Colors.primaryLight, borderWidth: 1, borderColor: Colors.primary + '40', borderRadius: 24, padding: 20, marginTop: 32, marginBottom: 24 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
             <Ionicons name="link-outline" size={24} color={Colors.primary} style={{ marginRight: 8 }} />
@@ -70,8 +70,8 @@ export default function ConsentScreen({ navigation }: any) {
             Votre consentement et vos dossiers médicaux sont ancrés sur la blockchain Polygon. Audit inviolable garanti.
           </Text>
         </View>
-
-        <View style={{ backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, borderRadius: 24, padding: 20, marginBottom: 32 }}>
+ 
+        <View style={{ backgroundColor: Colors.surface, borderWidth: 1, borderColor: Colors.border, borderRadius: 24, padding: 20, marginBottom: 32 }}>
           <Text style={[Typography.h3, { marginBottom: 8 }]}>Engagement RGPD</Text>
           <Text style={[Typography.caption, { color: Colors.textSecondary, lineHeight: 22 }]}>
             Vos données sont chiffrées de bout en bout. Droit d'accès, de rectification et de suppression.
