@@ -161,11 +161,26 @@ app.get('/api/sessions/:id/messages', (req, res) => {
 });
 
 app.post('/api/sessions/:id/messages', (req, res) => {
-  const msg = req.body;
+  const { id } = req.params;
+  const msgBody = req.body;
   try {
+    // Normalize: the client sends 'text' as content, sessionId might be missing
+    const msg = {
+      id: msgBody.id || `msg-${Date.now()}-${Math.random().toString(36).substr(2,5)}`,
+      sessionId: id, // Always inject the sessionId from the URL param
+      role: msgBody.role || (msgBody.isUser ? 'user' : 'assistant'),
+      content: msgBody.content || msgBody.text || '',
+      timestamp: msgBody.timestamp || Date.now(),
+      imageBase64: msgBody.imageBase64 || null,
+      agent: msgBody.agent || null,
+      urgencyScore: msgBody.urgencyScore || null,
+      xaiExplanation: msgBody.xaiExplanation || null,
+      sources: msgBody.sources ? JSON.stringify(msgBody.sources) : null,
+    };
     dbManager.saveMessage(msg);
     res.json({ success: true });
   } catch (err) {
+    console.error('[MSG SAVE ERROR]', err.message, 'Body:', JSON.stringify(msgBody).substring(0, 200));
     res.status(500).json({ error: err.message });
   }
 });

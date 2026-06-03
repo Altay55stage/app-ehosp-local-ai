@@ -126,7 +126,7 @@ export default function HealthQuestionnaireScreen({ navigation }: any) {
             </Text>
           </View>
           <View className="h-2 w-full rounded-full overflow-hidden" style={{ backgroundColor: Colors.border }}>
-            <View style={{ width: `${progress * 100}%` }} className="h-full rounded-full" />
+            <View style={{ width: `${progress * 100}%`, backgroundColor: Colors.primary }} className="h-full rounded-full" />
           </View>
         </View>
 

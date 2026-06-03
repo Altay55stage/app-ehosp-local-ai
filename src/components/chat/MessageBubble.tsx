@@ -3,7 +3,7 @@ import { View, Text, Image, Animated } from 'react-native';
 import XAIExplanation from './XAIExplanation';
 
 // Composant de texte qui s'écrit lettre par lettre (Optimisé)
-const StreamingText = React.memo(({ text, isStreaming }: { text: string; isStreaming?: boolean }) => {
+const StreamingText = React.memo(({ text, isStreaming, isUser }: { text: string; isStreaming?: boolean; isUser?: boolean }) => {
   const [displayed, setDisplayed] = useState(isStreaming ? '' : text);
   const cursorOpacity = useRef(new Animated.Value(1)).current;
 
@@ -40,24 +40,24 @@ const StreamingText = React.memo(({ text, isStreaming }: { text: string; isStrea
   }, [isStreaming]);
 
   return (
-    <Text className="text-white text-base leading-6">
+    <Text className={`text-base leading-6 ${isUser ? 'text-white' : 'text-slate-800'}`}>
       {displayed}
       {isStreaming && displayed.length < text.length && (
         <Animated.Text style={{ opacity: cursorOpacity, color: '#10B981', fontWeight: 'bold' }}>▊</Animated.Text>
       )}
     </Text>
   );
-}, (prev, next) => prev.text === next.text && prev.isStreaming === next.isStreaming);
+}, (prev, next) => prev.text === next.text && prev.isStreaming === next.isStreaming && prev.isUser === next.isUser);
 
 const MessageBubble = React.memo(({ message }: { message: any }) => {
   const isUser = message.isUser;
   
   return (
     <View className={`w-full flex-row my-2 ${isUser ? 'justify-end' : 'justify-start'}`}>
-      <View className={`max-w-[85%] rounded-2xl p-4 ${isUser ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-white/5 border border-white/10 shadow-sm'}`}>
+      <View className={`max-w-[85%] rounded-2xl p-4 ${isUser ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-white border border-slate-200 shadow-sm'}`}>
         {!isUser && (
           <View className="flex-row items-center mb-3">
-            <View className="bg-primary/20 border border-primary/30 rounded-full px-3 py-1 flex-row items-center">
+            <View className="bg-primary/10 border border-primary/20 rounded-full px-3 py-1 flex-row items-center">
               <Text className="text-primary text-[10px] font-black mr-1">●</Text>
               <Text className="text-primary text-xs font-bold uppercase tracking-widest">
                 {message.agent ? message.agent.replace(/^Gén\s+|^Généraliste\s+/, '👨‍⚕️ ') : "👨‍⚕️ Généraliste"}
@@ -75,7 +75,7 @@ const MessageBubble = React.memo(({ message }: { message: any }) => {
         )}
 
         {message.text ? (
-          <StreamingText text={message.text} isStreaming={!isUser && message.isStreaming} />
+          <StreamingText text={message.text} isStreaming={!isUser && message.isStreaming} isUser={isUser} />
         ) : null}
         
         {!isUser && message.xaiExplanation && (
@@ -94,4 +94,3 @@ const MessageBubble = React.memo(({ message }: { message: any }) => {
 });
 
 export default MessageBubble;
-

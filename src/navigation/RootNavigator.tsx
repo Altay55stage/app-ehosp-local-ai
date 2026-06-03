@@ -72,6 +72,21 @@ export default function RootNavigator() {
           if (cs.val()?.accepted) isConsentAccepted = true;
           if (qs.val()?.completedAt) isQuestionnaireCompleted = true;
         } catch {}
+        // Fix : also check profile-specific questionnaire keys in AsyncStorage
+        // The questionnaire is stored under @questionnaire_uid_profileId, scan all keys
+        if (!isQuestionnaireCompleted) {
+          try {
+            const allKeys = await AsyncStorage.getAllKeys();
+            const qKey = allKeys.find(k => k.startsWith(`@questionnaire_${uid}_`));
+            if (qKey) {
+              const qData = await AsyncStorage.getItem(qKey);
+              if (qData) {
+                const parsed = JSON.parse(qData);
+                if (parsed?.completedAt) isQuestionnaireCompleted = true;
+              }
+            }
+          } catch {}
+        }
         dispatch(setHasAcceptedConsent(isConsentAccepted));
         dispatch(setHasCompletedQuestionnaire(isQuestionnaireCompleted));
 
